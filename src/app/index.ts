@@ -1,20 +1,17 @@
-import { Express, Request, Response } from "express";
-import HomeController from "./home/controller/home";
+import { setRoutes } from "core/application";
+import { Route } from "core/types/router";
+import HomeController from "./home/controllers/home";
+import ProductsController from "./productst/controllers/products";
 
-export default function appRoutes(app: Express) {
-  app.get("/", HomeController); // Request Method: GET
-  app.get("/products", (request: Request, response: Response) => {
-    response.send(request.query);
-  });
-}
+const routes: Route[] = [
+  {
+    path: "/",
+    handler: HomeController,
+  },
+  {
+    path: "/products",
+    handler: ProductsController,
+  },
+];
 
-// URL
-// http schema >> http | https >> http
-// ://
-// www ?
-// domain >> local host
-// port >> 3000
-// route /gmail
-// query string ?welcome=hasan
-// hash# ?welcome=hasan#user
-// {httpSchema}(://)(www.?){domain}{port?}{route?}{query-string?}{#hash?}
+setRoutes(routes);
