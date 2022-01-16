@@ -9,6 +9,7 @@
   },
   "_moduleAliases": {
     "src": "./src",
+    "app": "./src/app",
     "core": "./src/core",
     "config": "./src/config",
     "utils": "./src/utils"
