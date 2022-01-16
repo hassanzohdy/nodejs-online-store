@@ -6,7 +6,7 @@ The application is built with `Typescript` `Express Js` `Nodemon` `MongoDB` and 
 
 ## Installation
 
-Just clone the repository then 
+Just clone the repository then:
 
 `yarn install`
 
