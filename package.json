@@ -9,9 +9,12 @@
   },
   "_moduleAliases": {
     "src": "./src",
+    "core": "./src/core",
+    "config": "./src/config",
     "utils": "./src/utils"
   },
   "dependencies": {
+    "chalk": "4",
     "express": "^4.17.2"
   },
   "devDependencies": {
