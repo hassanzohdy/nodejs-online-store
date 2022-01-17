@@ -32,14 +32,14 @@ export default function startApplication() {
   // for form data
   app.use(upload.any());
 
-  // auth
-  app.use(auth);
-
   // for json content
   app.use(express.json());
 
   // for form-urlencoded
   app.use(express.urlencoded({ extended: true }));
+
+  // auth
+  app.use(auth);
 
   setAppRoutes(app);
 
