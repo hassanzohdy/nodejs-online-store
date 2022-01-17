@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, { Express, urlencoded } from "express";
 import { applicationConfigurations } from "config";
 import { log } from "./log";
 import chalk from "chalk";
@@ -24,6 +24,9 @@ export default function startApplication() {
   const app = express();
 
   const port: number = applicationConfigurations.port;
+
+  app.use(express.json());
+  app.use(express.urlencoded({ extended: true }));
 
   setAppRoutes(app);
 
