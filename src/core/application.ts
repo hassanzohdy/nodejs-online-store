@@ -1,8 +1,9 @@
-import express, { Express, urlencoded } from "express";
+import express, { Express, Request, Response } from "express";
 import { applicationConfigurations } from "config";
 import { log } from "./log";
 import chalk from "chalk";
 import { Route } from "./types/router";
+import multer from "multer";
 
 const routesList: Route[] = [];
 
@@ -24,6 +25,14 @@ export default function startApplication() {
   const app = express();
 
   const port: number = applicationConfigurations.port;
+
+  const upload = multer();
+
+  app.post("/upload", upload.any(), (request: Request, response: Response) => {
+    console.log(request.files);
+
+    response.send("Uploaded!");
+  });
 
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
