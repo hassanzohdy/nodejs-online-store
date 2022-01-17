@@ -16,6 +16,27 @@ export type RequestMiddleware = (
   next: NextFunction
 ) => any;
 
+export type RouterGroup = {
+  /**
+   * Route prefix for all listed routes
+   */
+  prefix?: string;
+  /**
+   * Request method for all routes in this group
+   *
+   * @default get
+   */
+  method?: RequestMethod;
+  /**
+   * Middleware list for listed routes
+   */
+  middleware?: RequestMiddleware[];
+  /**
+   * Routes list
+   */
+  routes: Route[];
+};
+
 export type Route = {
   /**
    * Route path
@@ -26,7 +47,7 @@ export type Route = {
    *
    * @default get
    */
-  method: RequestMethod;
+  method?: RequestMethod;
   /**
    * Route handler
    */

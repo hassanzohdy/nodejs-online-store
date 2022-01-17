@@ -1,11 +1,14 @@
 import {
   Route,
+  RouterGroup,
   RequestMethod,
   RequestHandler,
   RequestMiddleware,
 } from "./types";
 
 import { Express } from "express";
+import { error, log } from "core/log";
+import chalk from "chalk";
 
 class Router {
   /**
@@ -104,7 +107,7 @@ class Router {
     for (let route of this.routesList) {
       const handlers = [...route.middleware!, route.handler];
 
-      this.app[route.method](route.path, ...handlers);
+      this.app[route.method!](route.path, ...handlers);
     }
   }
 
@@ -113,6 +116,35 @@ class Router {
    */
   public list(): Route[] {
     return this.routesList;
+  }
+
+  /**
+   * Create grouped routes
+   */
+  public group(group: RouterGroup): Router {
+    for (let route of group.routes) {
+      const path: string = (group.prefix || "") + route.path;
+
+      const middleware: RequestMiddleware[] = [
+        ...(group.middleware || []),
+        ...(route.middleware || []),
+      ];
+
+      const requestMethod: RequestMethod = (route.method ||
+        group.method) as RequestMethod;
+
+      if (!requestMethod) {
+        return error(
+          chalk.bold.red(
+            `Request method must be defined in the group object properties or in route object properties.`
+          )
+        );
+      }
+
+      this.route(requestMethod, path, route.handler, middleware);
+    }
+
+    return this;
   }
 }
 
