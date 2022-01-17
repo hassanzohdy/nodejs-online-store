@@ -1,15 +1,10 @@
-import express, {
-  Express,
-  NextFunction,
-  request,
-  Request,
-  Response,
-} from "express";
+import express, { Express } from "express";
 import { applicationConfigurations } from "config";
 import { log } from "./log";
 import chalk from "chalk";
 import { Route } from "./types/router";
 import multer from "multer";
+import auth from "app/middleware/auth";
 
 const routesList: Route[] = [];
 
@@ -32,30 +27,19 @@ export default function startApplication() {
 
   const port: number = applicationConfigurations.port;
 
-  // if the request has no token = 1, return response invalid user token
-
   const upload = multer();
 
   // for form data
   app.use(upload.any());
+
+  // auth
+  app.use(auth);
+
   // for json content
   app.use(express.json());
+
   // for form-urlencoded
   app.use(express.urlencoded({ extended: true }));
-
-  const auth = (request: Request, response: Response, next: NextFunction) => {
-    if (request.query.token != "1") {
-      return response.send("Invalid user token");
-    }
-    // if reached this line, this is valid request
-    next();
-  };
-
-  // app.use(auth);
-
-  app.get("/test", auth, (request: Request, response: Response) => {
-    response.send("Done!");
-  });
 
   setAppRoutes(app);
 
