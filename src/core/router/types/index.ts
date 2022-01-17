@@ -1,6 +1,20 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 
 export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";
+
+/**
+ * Request handler
+ */
+export type RequestHandler = (request: Request, response: Response) => any;
+
+/**
+ * Request middleware
+ */
+export type RequestMiddleware = (
+  request: Request,
+  response: Response,
+  next: NextFunction
+) => any;
 
 export type Route = {
   /**
@@ -12,9 +26,13 @@ export type Route = {
    *
    * @default get
    */
-  method?: RequestMethod;
+  method: RequestMethod;
   /**
    * Route handler
    */
   handler: (request: Request, response: Response) => void | any;
+  /**
+   * Route middleware
+   */
+  middleware?: RequestMiddleware[];
 };

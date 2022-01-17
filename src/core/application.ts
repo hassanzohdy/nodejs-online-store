@@ -4,7 +4,7 @@ import { log } from "./log";
 import chalk from "chalk";
 import multer from "multer";
 import auth from "app/middleware/auth";
-import { setAppRoutes } from "./router/router";
+import router from "./router";
 
 export default function startApplication() {
   const app = express();
@@ -25,7 +25,7 @@ export default function startApplication() {
   // auth
   app.use(auth);
 
-  setAppRoutes(app);
+  router.scan(app);
 
   app.listen(port, () => {
     log(`Server Started!, app path http://localhost:${chalk.bold.cyan(port)}`);

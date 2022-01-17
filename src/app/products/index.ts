@@ -1,18 +1,23 @@
-import { Route } from "core/router";
+import router from "core/router";
 import auth from "../middleware/auth";
-import { setRoutes } from "core/router";
 import ProductsController from "./controllers/products";
 import singleProductController from "./controllers/single-product";
 
-const routes: Route[] = [
-  {
-    path: "/products",
-    handler: ProductsController,
-  },
-  {
-    path: "/products/:id/:slug",
-    handler: singleProductController,
-  },
-];
+router
+  .get("/products", ProductsController, [auth])
+  .get("/products/:id/:slug", singleProductController, [auth]);
 
-setRoutes(routes);
+router.group({
+  path: "/products",
+  middleware: [auth],
+  routes: [
+    {
+      path: "/",
+      handler: ProductsController,
+    },
+    {
+      path: "/:id/:slug",
+      handler: singleProductController,
+    },
+  ],
+});
