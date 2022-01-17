@@ -1,4 +1,10 @@
-import express, { Express, Request, Response } from "express";
+import express, {
+  Express,
+  NextFunction,
+  request,
+  Request,
+  Response,
+} from "express";
 import { applicationConfigurations } from "config";
 import { log } from "./log";
 import chalk from "chalk";
@@ -26,16 +32,30 @@ export default function startApplication() {
 
   const port: number = applicationConfigurations.port;
 
+  // if the request has no token = 1, return response invalid user token
+
   const upload = multer();
 
-  app.post("/upload", upload.any(), (request: Request, response: Response) => {
-    console.log(request.files);
-
-    response.send("Uploaded!");
-  });
-
+  // for form data
+  app.use(upload.any());
+  // for json content
   app.use(express.json());
+  // for form-urlencoded
   app.use(express.urlencoded({ extended: true }));
+
+  const auth = (request: Request, response: Response, next: NextFunction) => {
+    if (request.query.token != "1") {
+      return response.send("Invalid user token");
+    }
+    // if reached this line, this is valid request
+    next();
+  };
+
+  // app.use(auth);
+
+  app.get("/test", auth, (request: Request, response: Response) => {
+    response.send("Done!");
+  });
 
   setAppRoutes(app);
 
