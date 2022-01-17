@@ -14,7 +14,9 @@ export function setRoutes(routes: Route[]) {
 
 function setAppRoutes(app: Express) {
   for (let route of routesList) {
-    app.get(route.path, route.handler);
+    const requestMethod = route.method || "get";
+
+    app[requestMethod](route.path, route.handler);
   }
 }
 
