@@ -1,5 +1,5 @@
-import { setRoutes } from "core/application";
-import { Route } from "core/types/router";
+import { Route } from "core/router";
+import { setRoutes } from "core/router";
 import ContactUsController from "./controllers/contact-us";
 import HomeController from "./controllers/home";
 

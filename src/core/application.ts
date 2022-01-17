@@ -1,26 +1,10 @@
-import express, { Express } from "express";
+import express from "express";
 import { applicationConfigurations } from "config";
 import { log } from "./log";
 import chalk from "chalk";
-import { Route } from "./types/router";
 import multer from "multer";
 import auth from "app/middleware/auth";
-
-const routesList: Route[] = [];
-
-export function setRoutes(routes: Route[]) {
-  for (const route of routes) {
-    routesList.push(route);
-  }
-}
-
-function setAppRoutes(app: Express) {
-  for (let route of routesList) {
-    const requestMethod = route.method || "get";
-
-    app[requestMethod](route.path, route.handler);
-  }
-}
+import { setAppRoutes } from "./router/router";
 
 export default function startApplication() {
   const app = express();

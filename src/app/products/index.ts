@@ -1,5 +1,6 @@
-import { setRoutes } from "core/application";
-import { Route } from "core/types/router";
+import { Route } from "core/router";
+import auth from "../middleware/auth";
+import { setRoutes } from "core/router";
 import ProductsController from "./controllers/products";
 import singleProductController from "./controllers/single-product";
 

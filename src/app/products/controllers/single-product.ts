@@ -10,3 +10,7 @@ export default function singleProductController(
 }
 
 // request.params
+// request.headers
+// request.query
+// request.body
+// request.files
