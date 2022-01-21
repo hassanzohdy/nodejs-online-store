@@ -1,10 +1,10 @@
 import express from "express";
 import { applicationConfigurations } from "config";
-import { log } from "./log";
+import { log } from "../log";
 import chalk from "chalk";
 import multer from "multer";
 import auth from "app/middleware/auth";
-import router from "./router";
+import router from "../router";
 
 export default function startApplication() {
   const app = express();

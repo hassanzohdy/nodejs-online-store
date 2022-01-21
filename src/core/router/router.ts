@@ -5,10 +5,11 @@ import {
   RequestHandler,
   RequestMiddleware,
 } from "./types";
-
 import { Express } from "express";
-import { error, log } from "core/log";
+import { error } from "core/log";
 import chalk from "chalk";
+import { routerConfigurations } from "config";
+import concatRoute from "@mongez/concat-route";
 
 class Router {
   /**
@@ -99,13 +100,14 @@ class Router {
 
   /**
    * Start the routing system
-   *
    */
   public scan(app: Express) {
     this.app = app;
 
     for (let route of this.routesList) {
       const handlers = [...route.middleware!, route.handler];
+
+      route.path = concatRoute(routerConfigurations.prefix!, route.path);
 
       this.app[route.method!](route.path, ...handlers);
     }
@@ -123,7 +125,7 @@ class Router {
    */
   public group(group: RouterGroup): Router {
     for (let route of group.routes) {
-      const path: string = (group.prefix || "") + route.path;
+      const path: string = concatRoute(group.prefix!, route.path);
 
       const middleware: RequestMiddleware[] = [
         ...(group.middleware || []),

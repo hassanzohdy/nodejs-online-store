@@ -57,3 +57,10 @@ export type Route = {
    */
   middleware?: RequestMiddleware[];
 };
+
+export type RouterConfigurations = {
+  /**
+   * Set base path prefix for all routes
+   */
+  prefix?: string;
+};
