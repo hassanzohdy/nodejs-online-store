@@ -1,5 +1,5 @@
 import express from "express";
-import { applicationConfigurations } from "config";
+import { applicationConfigurations, databaseConfigurations } from "config";
 import { log } from "../log";
 import chalk from "chalk";
 import multer from "multer";
@@ -14,7 +14,8 @@ export default function startApplication() {
 
   const upload = multer();
 
-  database.connect();
+  // connect to database
+  database.connect(databaseConfigurations);
 
   // for form data
   app.use(upload.any());

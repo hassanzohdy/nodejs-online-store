@@ -1,4 +1,7 @@
+import chalk from "chalk";
+import { log } from "../log";
 import { Db, MongoClient } from "mongodb";
+import { DatabaseConfigurations } from "./types";
 
 class Database {
   /**
@@ -12,22 +15,35 @@ class Database {
   protected db!: Db;
 
   /**
+   * Database configurations
+   */
+  protected databaseConfigurations!: DatabaseConfigurations;
+
+  /**
    * Connect to database
    */
-  public async connect() {
+  public async connect(databaseConfigurations: DatabaseConfigurations) {
     if (this.client) return;
 
-    const url = "mongodb://localhost:27017";
+    const port: number = databaseConfigurations.port || 27017;
+
+    const server: string = databaseConfigurations.server || "localhost";
+
+    const url = `mongodb://${server}:${port}`;
     this.client = new MongoClient(url, {
       auth: {
-        username: "root",
-        password: "BaseRoot",
+        username: databaseConfigurations.username,
+        password: databaseConfigurations.password,
       },
     });
 
+    this.databaseConfigurations = databaseConfigurations;
+
     await this.client.connect();
 
-    this.setDatabase("myDb");
+    log(chalk.greenBright("Connected To Database Successfully!"));
+
+    this.setDatabase(databaseConfigurations.databaseName);
   }
 
   /**
