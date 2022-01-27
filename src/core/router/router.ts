@@ -7,6 +7,7 @@ import {
 } from "./types";
 import {
   Express,
+  NextFunction,
   Request as ExpressRequest,
   Response as ExpressResponse,
 } from "express";
