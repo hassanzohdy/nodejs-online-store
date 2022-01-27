@@ -7,17 +7,17 @@ class Database {
   /**
    * Database Driver Client
    */
-  protected client!: MongoClient;
+  public client!: MongoClient;
 
   /**
    * Database handler
    */
-  protected db!: Db;
+  public db!: Db;
 
   /**
    * Database configurations
    */
-  protected databaseConfigurations!: DatabaseConfigurations;
+  public databaseConfigurations!: DatabaseConfigurations;
 
   /**
    * Connect to database
