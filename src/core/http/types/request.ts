@@ -1,4 +1,4 @@
-import { Request as ExpressRequest, Response } from "express";
+import { Request as ExpressRequest } from "express";
 import { IncomingHttpHeaders } from "http";
 import { RequestMethod } from "../../router";
 
@@ -7,11 +7,6 @@ export type Request = {
    * Express Request Instance
    */
   baseRequest: ExpressRequest;
-
-  /**
-   * Express Response Instance
-   */
-  baseResponse: Response;
 
   /**
    * Request headers
@@ -71,5 +66,5 @@ export type Request = {
   /**
    * Set the request and response of express app
    */
-  setRequest(request: ExpressRequest, response: Response): void;
+  setRequest(request: ExpressRequest): void;
 };

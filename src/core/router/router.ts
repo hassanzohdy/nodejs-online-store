@@ -16,6 +16,7 @@ import chalk from "chalk";
 import { routerConfigurations } from "config";
 import concatRoute from "@mongez/concat-route";
 import request from "../http/request";
+import response from "../http/response";
 
 class Router {
   /**
@@ -113,15 +114,16 @@ class Router {
     for (let route of this.routesList) {
       const handlers = [
         ...route.middleware!,
-        (expressRequest: ExpressRequest, response: ExpressResponse) => {
-          request.setRequest(expressRequest, response);
+        (expressRequest: ExpressRequest, expressResponse: ExpressResponse) => {
+          response.setBaseResponse(expressResponse);
+          request.setRequest(expressRequest);
           route.handler(request, response);
         },
       ];
 
       route.path = concatRoute(routerConfigurations.prefix!, route.path);
 
-      this.app[route.method!](route.path, ...handlers);
+      this.app[route.method!](route.path, ...(handlers as any));
     }
   }
 

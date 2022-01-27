@@ -1,4 +1,5 @@
-import { NextFunction, Request as ExpressRequest, Response } from "express";
+import { NextFunction, Request as ExpressRequest } from "express";
+import { Response } from "../../http/response";
 import { Request as AppRequest } from "../../http/types/request";
 
 export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";

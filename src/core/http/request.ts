@@ -1,6 +1,6 @@
 import cast from "utils/cast";
 import { Request as AppRequest } from "./types/request";
-import { Request as ExpressRequest, Response } from "express";
+import { Request as ExpressRequest } from "express";
 import { IncomingHttpHeaders } from "http";
 import { RequestMethod } from "../router";
 import { Obj } from "@mongez/reinforcements";
@@ -12,16 +12,10 @@ export class Request implements AppRequest {
   public baseRequest!: ExpressRequest;
 
   /**
-   * Express Response Instance
-   */
-  public baseResponse!: Response;
-
-  /**
    * Set the request and response of express app
    */
-  public setRequest(request: ExpressRequest, response: Response): void {
+  public setRequest(request: ExpressRequest): void {
     this.baseRequest = request;
-    this.baseResponse = response;
   }
 
   /**

@@ -1,5 +1,5 @@
 import { Request } from "core/http/types/request";
-import { Response } from "express";
+import { Response } from "core/http/response";
 
 export default function singleProductController(
   request: Request,
@@ -9,9 +9,3 @@ export default function singleProductController(
     success: true,
   });
 }
-
-// request.params
-// request.headers
-// request.query
-// request.body
-// request.files
