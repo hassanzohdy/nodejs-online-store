@@ -5,6 +5,7 @@ import chalk from "chalk";
 import multer from "multer";
 import auth from "app/middleware/auth";
 import router from "../router";
+import database from "../db";
 
 export default function startApplication() {
   const app = express();
@@ -12,6 +13,8 @@ export default function startApplication() {
   const port: number = applicationConfigurations.port;
 
   const upload = multer();
+
+  database.connect();
 
   // for form data
   app.use(upload.any());
