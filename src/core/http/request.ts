@@ -1,6 +1,8 @@
 import { Request as AppRequest } from "./types/request";
 import { Request as ExpressRequest, Response } from "express";
 import { IncomingHttpHeaders } from "http";
+import { RequestMethod } from "../router";
+import { Obj } from "@mongez/reinforcements";
 
 export class Request implements AppRequest {
   /**
@@ -29,6 +31,27 @@ export class Request implements AppRequest {
   }
 
   /**
+   * Get value from either query string params or request payload
+   */
+  public input(key: string, defaultValue: any = null): any {
+    return this.get(key) || this.body(key, defaultValue);
+  }
+
+  /**
+   * Get all inputs from query string params and request payload
+   */
+  public all(): any {
+    return { ...this.query, ...this.payload };
+  }
+
+  /**
+   * Get the given keys only from the request data
+   */
+  public only(...keys: string[]): any {
+    return Obj.only(this.all(), keys);
+  }
+
+  /**
    * Get input from query string
    */
   public param(key: string, defaultValue: any = null): any {
@@ -40,6 +63,13 @@ export class Request implements AppRequest {
    */
   public body(key: string, defaultValue: any = null): any {
     return this.payload[key] || defaultValue;
+  }
+
+  /**
+   * Determine whether current request method is matching the given request method
+   */
+  public is(method: RequestMethod): boolean {
+    return this.baseRequest.method === method;
   }
 
   /**

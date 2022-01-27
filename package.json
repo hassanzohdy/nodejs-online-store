@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "@mongez/concat-route": "^1.0.0",
+    "@mongez/reinforcements": "^1.0.20",
     "chalk": "4",
     "express": "^4.17.2",
     "multer": "^1.4.4"

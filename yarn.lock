@@ -19,6 +19,14 @@
   resolved "https://registry.yarnpkg.com/@mongez/concat-route/-/concat-route-1.0.0.tgz#c2c0d26274c6135914be5f64670a2986aa443ce2"
   integrity sha512-yl0kNPilESIk3GcdZtgChfpfVc8VzqQmHTZ+H12wuxACWl7hbA9jK8xQrjvdh+IIxd4Wzr4eaDfrpRpPTvwSQw==
 
+"@mongez/reinforcements@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.20.tgz#69070c920e463ac545f6ed30f603b20ca20245dc"
+  integrity sha512-51nRq+bP+dXAUPFBo1vEfcfUKcjc06yW4yK/adVE0AP+HJyulQWZTKdrRoH8U0/7wICrKpYNhdl5jp1eGmFHGw==
+  dependencies:
+    immutable "^4.0.0"
+    sprintf-js "^1.1.2"
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
@@ -692,6 +700,11 @@ ignore-by-default@^1.0.1:
   resolved "https://registry.yarnpkg.com/ignore-by-default/-/ignore-by-default-1.0.1.tgz#48ca6d72f6c6a3af00a9ad4ae6876be3889e2b09"
   integrity sha1-SMptcvbGo68Aqa1K5odr44ieKwk=
 
+immutable@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/immutable/-/immutable-4.0.0.tgz#b86f78de6adef3608395efb269a91462797e2c23"
+  integrity sha512-zIE9hX70qew5qTUjSS7wi1iwj/l7+m54KWU247nhM3v806UdGj1yDndXj+IOYxxtW9zyLI+xqFNZjTuDaLUqFw==
+
 import-lazy@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/import-lazy/-/import-lazy-2.1.0.tgz#05698e3d45c88e8d7e9d92cb0584e77f096f3e43"
@@ -1219,6 +1232,11 @@ signal-exit@^3.0.2:
   version "3.0.6"
   resolved "https://registry.yarnpkg.com/signal-exit/-/signal-exit-3.0.6.tgz#24e630c4b0f03fea446a2bd299e62b4a6ca8d0af"
   integrity sha512-sDl4qMFpijcGw22U5w63KmD3cZJfBuFlVNbVMKje2keoKML7X2UzWbc4XrmEbDwg0NXJc3yv4/ox7b+JWb57kQ==
+
+sprintf-js@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.1.2.tgz#da1765262bf8c0f571749f2ad6c26300207ae673"
+  integrity sha512-VE0SOVEHCk7Qc8ulkWw3ntAzXuqf7S2lvwQaDLRnUeIEaKNQJzV6BwmLKhOqT61aGhfUMrXeaBk+oDGCzvhcug==
 
 "statuses@>= 1.5.0 < 2", statuses@~1.5.0:
   version "1.5.0"
