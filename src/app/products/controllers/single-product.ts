@@ -5,7 +5,6 @@ export default function singleProductController(
   request: Request,
   response: Response
 ) {
-  // request.params
   response.send("Done");
 }
 

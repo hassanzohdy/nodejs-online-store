@@ -26,7 +26,7 @@ export type Request = {
   /**
    * Get input from request payload/body otherwise return default value
    */
-  body(key: string, defaultValue: any): any;
+  body(key: string, defaultValue?: any): any;
 
   /**
    * Determine whether current request method is matching the given request method
@@ -36,7 +36,7 @@ export type Request = {
   /**
    * Get value from either query string params or request payload
    */
-  input(key: string, defaultValue: any): any;
+  input(key: string, defaultValue?: any): any;
 
   /**
    * Get all inputs from query string params and request payload
@@ -56,7 +56,7 @@ export type Request = {
   /**
    * Get param value from params list, otherwise return default value
    */
-  param(key: string, defaultValue: any): any;
+  param(key: string, defaultValue?: any): any;
 
   /**
    * Request query string List
@@ -66,7 +66,7 @@ export type Request = {
   /**
    * Get input from query string
    */
-  get(key: string, defaultValue: any): any;
+  get(key: string, defaultValue?: any): any;
 
   /**
    * Set the request and response of express app

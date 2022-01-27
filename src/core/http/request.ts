@@ -1,3 +1,4 @@
+import cast from "utils/cast";
 import { Request as AppRequest } from "./types/request";
 import { Request as ExpressRequest, Response } from "express";
 import { IncomingHttpHeaders } from "http";
@@ -27,7 +28,7 @@ export class Request implements AppRequest {
    * Get input from query string
    */
   public get(key: string, defaultValue: any = null): any {
-    return this.query[key] || defaultValue;
+    return cast(this.query[key] || defaultValue);
   }
 
   /**
@@ -55,14 +56,14 @@ export class Request implements AppRequest {
    * Get input from query string
    */
   public param(key: string, defaultValue: any = null): any {
-    return this.params[key] || defaultValue;
+    return cast(this.params[key] || defaultValue);
   }
 
   /**
    * Get input from request payload/body otherwise return default value
    */
   public body(key: string, defaultValue: any = null): any {
-    return this.payload[key] || defaultValue;
+    return cast(this.payload[key] || defaultValue);
   }
 
   /**

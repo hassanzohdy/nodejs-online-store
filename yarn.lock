@@ -19,13 +19,18 @@
   resolved "https://registry.yarnpkg.com/@mongez/concat-route/-/concat-route-1.0.0.tgz#c2c0d26274c6135914be5f64670a2986aa443ce2"
   integrity sha512-yl0kNPilESIk3GcdZtgChfpfVc8VzqQmHTZ+H12wuxACWl7hbA9jK8xQrjvdh+IIxd4Wzr4eaDfrpRpPTvwSQw==
 
-"@mongez/reinforcements@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.20.tgz#69070c920e463ac545f6ed30f603b20ca20245dc"
-  integrity sha512-51nRq+bP+dXAUPFBo1vEfcfUKcjc06yW4yK/adVE0AP+HJyulQWZTKdrRoH8U0/7wICrKpYNhdl5jp1eGmFHGw==
+"@mongez/reinforcements@^1.0.21":
+  version "1.0.21"
+  resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.21.tgz#8aa58d2a5eb50d4d4015924ccf9725f666debe21"
+  integrity sha512-YC8DSVrn1vn7BhQiD+6awsz9I9EjQ0KpHQC9wVK4b3bk6oK8u/gv/VfPYAtjsPh8QUp7im6Cc0iDJRRDGDoxyg==
   dependencies:
     immutable "^4.0.0"
     sprintf-js "^1.1.2"
+
+"@mongez/supportive-is@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@mongez/supportive-is/-/supportive-is-1.0.4.tgz#2414be9253309ff391f8fe2e58ba12d24cab8399"
+  integrity sha512-SF5SDiEf3xzP9ALemyfkXzyjy5FQm+UyiN4QnbPprv2ZhPcJUdWyIJWds8Oom2ZDIKJlEkcjDmcob5Ku/mHcig==
 
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
@@ -105,10 +110,15 @@
   dependencies:
     "@types/express" "*"
 
-"@types/node@*", "@types/node@^17.0.8":
+"@types/node@*":
   version "17.0.8"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.8.tgz#50d680c8a8a78fe30abe6906453b21ad8ab0ad7b"
   integrity sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==
+
+"@types/node@^17.0.12":
+  version "17.0.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.12.tgz#f7aa331b27f08244888c47b7df126184bc2339c5"
+  integrity sha512-4YpbAsnJXWYK/fpTVFlMIcUIho2AYCi4wg5aNPrG1ng7fn/1/RZfCIpRCiBX+12RVa34RluilnvCqD+g3KiSiA==
 
 "@types/qs@*":
   version "6.9.7"
@@ -1362,10 +1372,10 @@ typedarray@^0.0.6:
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
 
-typescript@^4.5.4:
-  version "4.5.4"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
-  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
+typescript@^4.5.5:
+  version "4.5.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.5.tgz#d8c953832d28924a9e3d37c73d729c846c5896f3"
+  integrity sha512-TCTIul70LyWe6IJWT8QSYeA54WQe8EjQFU4wY52Fasj5UKx88LNYKCgBEHcOMOrFF1rKGbD8v/xcNWVUq9SymA==
 
 undefsafe@^2.0.5:
   version "2.0.5"
