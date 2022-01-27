@@ -1,6 +1,6 @@
 import chalk from "chalk";
 import { log } from "../log";
-import { Db, MongoClient } from "mongodb";
+import { Collection, Db, MongoClient } from "mongodb";
 import { DatabaseConfigurations } from "./types";
 
 class Database {
@@ -58,6 +58,13 @@ class Database {
    */
   public isConnected(): boolean {
     return this.client !== undefined;
+  }
+
+  /**
+   * Get database collection
+   */
+  public collection(collectionName: string): Collection {
+    return this.db.collection(collectionName);
   }
 }
 
