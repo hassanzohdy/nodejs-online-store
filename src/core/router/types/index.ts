@@ -1,17 +1,18 @@
-import { NextFunction, Request, Response } from "express";
+import { NextFunction, Request as ExpressRequest, Response } from "express";
+import { Request as AppRequest } from "../../http/types/request";
 
 export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";
 
 /**
  * Request handler
  */
-export type RequestHandler = (request: Request, response: Response) => any;
+export type RequestHandler = (request: AppRequest, response: Response) => any;
 
 /**
  * Request middleware
  */
 export type RequestMiddleware = (
-  request: Request,
+  request: ExpressRequest,
   response: Response,
   next: NextFunction
 ) => any;
@@ -51,7 +52,7 @@ export type Route = {
   /**
    * Route handler
    */
-  handler: (request: Request, response: Response) => void | any;
+  handler: (request: AppRequest, response: Response) => void | any;
   /**
    * Route middleware
    */

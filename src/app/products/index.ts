@@ -1,5 +1,4 @@
 import router from "core/router";
-import auth from "../middleware/auth";
 import ProductsController from "./controllers/products";
 import singleProductController from "./controllers/single-product";
 

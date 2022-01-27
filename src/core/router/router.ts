@@ -5,11 +5,16 @@ import {
   RequestHandler,
   RequestMiddleware,
 } from "./types";
-import { Express } from "express";
+import {
+  Express,
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from "express";
 import { error } from "core/log";
 import chalk from "chalk";
 import { routerConfigurations } from "config";
 import concatRoute from "@mongez/concat-route";
+import request from "../http/request";
 
 class Router {
   /**
@@ -105,7 +110,13 @@ class Router {
     this.app = app;
 
     for (let route of this.routesList) {
-      const handlers = [...route.middleware!, route.handler];
+      const handlers = [
+        ...route.middleware!,
+        (expressRequest: ExpressRequest, response: ExpressResponse) => {
+          request.setRequest(expressRequest, response);
+          route.handler(request, response);
+        },
+      ];
 
       route.path = concatRoute(routerConfigurations.prefix!, route.path);
 
