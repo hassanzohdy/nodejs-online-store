@@ -9,22 +9,9 @@ export default async function HomeController(
 ) {
   const user = new User();
 
-  await user.insert([
-    {
-      id: 3,
-      name: "Ali 2",
-    },
-    {
-      id: 3,
-      name: "Ali 3",
-    },
-  ]);
-
-  const users = await user.handler
-    .find({
-      id: 3,
-    })
-    .toArray();
+  const users = await user.first({
+    id: 1,
+  });
 
   response.send({
     records: users,
