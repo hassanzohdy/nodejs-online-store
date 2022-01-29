@@ -1,6 +1,5 @@
 import { Response } from "core/http/response";
 import { Request } from "core/http/types/request";
-import { log } from "core/log";
 import User from "../../models/User";
 
 export default async function HomeController(
@@ -9,11 +8,8 @@ export default async function HomeController(
 ) {
   const user = new User();
 
-  const users = await user.first({
-    id: 1,
-  });
-
+  const activeUsers = await user._.where("id", ">", 10).list();
   response.send({
-    records: users,
+    records: activeUsers,
   });
 }

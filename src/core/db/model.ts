@@ -1,6 +1,7 @@
+import database from "./database";
+import Aggregate from "./aggregate";
 import Is from "@mongez/supportive-is";
 import { Collection, Filter } from "mongodb";
-import database from "./database";
 
 export default abstract class Model {
   /**
@@ -14,28 +15,21 @@ export default abstract class Model {
   public constructor() {}
 
   /**
-   * Get the collection handler
-   */
-  public get query(): Collection {
-    return database.collection(this.collection);
-  }
-
-  /**
    * Get list of records for the given options
    */
-  public async list<T>(options: Filter<T>): Promise<any[]> {
+  public async list<T>(options: Filter<T> = {}): Promise<any[]> {
     return await this.query.find(options).toArray();
   }
 
   /**
    * Get the first matched record for the given options
    */
-  public async first<T>(options: Filter<T>): Promise<any> {
+  public async first<T>(options: Filter<T> = {}): Promise<any> {
     return await this.query.findOne(options);
   }
 
   /**
-   * Insert data into the given model
+   * Insert data into the current model
    */
   public async insert(data: any) {
     if (Is.array(data)) {
@@ -43,5 +37,26 @@ export default abstract class Model {
     } else {
       return await this.query.insertOne(data);
     }
+  }
+
+  /**
+   * Alias to aggregate getter
+   */
+  public get _() {
+    return this.aggregate;
+  }
+
+  /**
+   * Get aggregate instance for current model
+   */
+  public get aggregate() {
+    return new Aggregate(this.query);
+  }
+
+  /**
+   * Get the collection handler
+   */
+  public get query(): Collection {
+    return database.collection(this.collection);
   }
 }

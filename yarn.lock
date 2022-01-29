@@ -19,6 +19,11 @@
   resolved "https://registry.yarnpkg.com/@mongez/concat-route/-/concat-route-1.0.0.tgz#c2c0d26274c6135914be5f64670a2986aa443ce2"
   integrity sha512-yl0kNPilESIk3GcdZtgChfpfVc8VzqQmHTZ+H12wuxACWl7hbA9jK8xQrjvdh+IIxd4Wzr4eaDfrpRpPTvwSQw==
 
+"@mongez/events@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@mongez/events/-/events-1.0.9.tgz#8d9c3d3830c5973740b76869ac3a08d64a7fbdbc"
+  integrity sha512-6vJaOeG6RE2Tzv9MsWVfBAqr5K/qESpymhlTPca5qs0bX4MGhHxAcBthhqByf6MJlAXwTGbBzoe9kmE6wGp3VA==
+
 "@mongez/reinforcements@^1.0.21":
   version "1.0.21"
   resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.21.tgz#8aa58d2a5eb50d4d4015924ccf9725f666debe21"

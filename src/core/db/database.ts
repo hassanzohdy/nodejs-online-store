@@ -1,7 +1,8 @@
 import chalk from "chalk";
 import { log } from "../log";
 import { Collection, Db, MongoClient } from "mongodb";
-import { DatabaseConfigurations } from "./types";
+import events, { EventSubscription } from "@mongez/events";
+import { DatabaseConfigurations, DatabaseEvent } from "./types";
 
 class Database {
   /**
@@ -41,9 +42,11 @@ class Database {
 
     await this.client.connect();
 
-    log(chalk.greenBright("Connected To Database Successfully!"));
-
     this.setDatabase(databaseConfigurations.databaseName);
+
+    this.trigger("connection", this);
+
+    log(chalk.greenBright("Connected To Database Successfully!"));
   }
 
   /**
@@ -65,6 +68,23 @@ class Database {
    */
   public collection(collectionName: string): Collection {
     return this.db.collection(collectionName);
+  }
+
+  /**
+   * Trigger events for database
+   */
+  public on(
+    event: DatabaseEvent,
+    callback: (database: Database) => void
+  ): EventSubscription {
+    return events.subscribe(`database.${event}`, callback);
+  }
+
+  /**
+   * Trigger database event
+   */
+  public trigger(event: DatabaseEvent, ...data: any[]): void {
+    events.trigger(`database.${event}`, ...data);
   }
 }
 
