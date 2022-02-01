@@ -1,14 +1,16 @@
-import "./home";
-import "./products";
 import database from "core/db";
-import { log } from "core/log";
-import User from "./models/User";
+import "./home";
+import User, { UserSchema } from "./models/User";
+import "./products";
 
 database.on("connection", () => {
-  async function test() {
-    const user = new User();
+  async function s() {
+    const m = await User.find<UserSchema>(1);
 
-    log(await user._.list());
+    if (!m) return;
+
+    console.log(m.name);
   }
-  test();
+
+  s();
 });

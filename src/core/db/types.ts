@@ -205,3 +205,14 @@ export interface AggregateInterface {
    */
   remove(options?: DeleteOptions): Promise<DeleteResult>;
 }
+
+export type ModelsList = {
+  [collectionName: string]: any;
+};
+
+export type BaseSchema = {
+  id?: number;
+  _id?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
+};

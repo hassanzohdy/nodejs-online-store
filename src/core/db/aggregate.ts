@@ -381,8 +381,6 @@ export default class Aggregate implements AggregateInterface {
   public parse(): any[] {
     const pipelines: any = this.pipelines.map((pipeline) => pipeline.parse());
 
-    log(pipelines);
-
     return pipelines;
   }
 

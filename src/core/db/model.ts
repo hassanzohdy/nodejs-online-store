@@ -1,62 +1,110 @@
-import database from "./database";
-import Aggregate from "./aggregate";
-import Is from "@mongez/supportive-is";
-import { Collection, Filter } from "mongodb";
+import { DynamicObject } from "utils/types";
+import database from ".";
+import databaseManager from "./DatabaseManager";
+import { modelsList } from "./models";
+import QueryBuilder from "./QueryBuilder";
+import { BaseSchema } from "./types";
 
-export default abstract class Model {
+function proxy<T>(object: any, handler: any): T {
+  return new Proxy(object, handler);
+}
+
+export default abstract class Model<Schema> {
   /**
-   * Database collection name
+   * Dynamic call for attributes
    */
-  protected collection!: string;
+  [key: string]: any;
+  /**
+   * Model attributes
+   */
+  public attributes: any = {};
+
+  /**
+   * {@inheritDoc}
+   */
+  public static collection: string = "users";
 
   /**
    * Constructor
    */
-  public constructor() {}
+  public constructor(attributes: Schema = {} as Schema) {
+    this.attributes = attributes;
 
-  /**
-   * Get list of records for the given options
-   */
-  public async list<T>(options: Filter<T> = {}): Promise<any[]> {
-    return await this.query.find(options).toArray();
+    /**
+     * Constructor
+     */
+    this.attributes = { ...attributes };
+    return proxy<Model<Schema>>(this, {
+      set: (model: any, name: string, value: any): boolean => {
+        model.attributes[name] = value;
+        return true;
+      },
+      get: (model: any, key: string): any => {
+        return (model as any)[key] || this.attributes[key];
+      },
+      deleteProperty: (model: any, key: any): boolean => {
+        if (key in model) {
+          delete (model as any)[key];
+        } else {
+          delete model.attributes[key];
+        }
+
+        return true;
+      },
+    });
   }
 
   /**
-   * Get the first matched record for the given options
+   * Merge the given attributes to current attributes
    */
-  public async first<T>(options: Filter<T> = {}): Promise<any> {
-    return await this.query.findOne(options);
+  public setAttributes<T>(attributes: T): Model<Schema> {
+    this.attributes = { ...this.attributes, ...attributes };
+
+    return this;
   }
 
   /**
-   * Insert data into the current model
+   * Save data into database
    */
-  public async insert(data: any) {
-    if (Is.array(data)) {
-      return await this.query.insertMany(data);
-    } else {
-      return await this.query.insertOne(data);
+  public async save(): Promise<any> {
+    if (this.id) {
+      this.updatedAt = new Date();
+      return await Model.query.update({ id: this.id }, this.attributes);
     }
+    this.createdAt = new Date();
+    this.updatedAt = new Date();
+    this.id = databaseManager.newId(Model.collection);
+    return await Model.query.insert(this.attributes);
   }
 
   /**
-   * Alias to aggregate getter
+   * Find Record by id and return new instance of model
    */
-  public get _() {
-    return this.aggregate;
+  public static async find<T>(id: number): Promise<Model<T> | null> {
+    const record = await this.query.first({
+      id,
+    });
+
+    if (!record) return null;
+
+    return new modelsList[this.collection](record as T);
   }
 
   /**
-   * Get aggregate instance for current model
+   * Find list of records based on the given filter and return list of models
    */
-  public get aggregate() {
-    return new Aggregate(this.query);
+  public static async list<T>(attributes: any = {}): Promise<T[]> {
+    const records = await this.query.list(attributes);
+
+    if (!records) return [];
+
+    return records.map((record) => new modelsList[this.collection](record));
   }
 
   /**
-   * Get the collection handler
+   * Get query builder
    */
-  public get query(): Collection {
-    return database.collection(this.collection);
+  public static get query() {
+    return database.query(this.collection);
   }
 }

@@ -3,6 +3,8 @@ import { log } from "../log";
 import { Collection, Db, MongoClient } from "mongodb";
 import events, { EventSubscription } from "@mongez/events";
 import { DatabaseConfigurations, DatabaseEvent } from "./types";
+import { modelsList } from "./models";
+import QueryBuilder from "./QueryBuilder";
 
 class Database {
   /**
@@ -85,6 +87,19 @@ class Database {
    */
   public trigger(event: DatabaseEvent, ...data: any[]): void {
     events.trigger(`database.${event}`, ...data);
+  }
+
+  /**
+   * Store model in models list
+   */
+  public defineModel<Schema>(collection: string, model: any) {
+    modelsList[collection] = model;
+  }
+  /**
+   * Create new query builder for the given collection name
+   */
+  public query(collection: string): QueryBuilder {
+    return new QueryBuilder(collection);
   }
 }
 

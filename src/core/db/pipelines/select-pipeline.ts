@@ -1,6 +1,6 @@
-import { DatabaseSelect, OrderBySchema, Pipeline } from "../types";
-import PipelineManager from "../pipeline";
 import Is from "@mongez/supportive-is";
+import PipelineManager from "../pipeline";
+import { DatabaseSelect, Pipeline } from "../types";
 
 export default class SelectPipeline
   extends PipelineManager
@@ -32,6 +32,7 @@ export default class SelectPipeline
    */
   public parseData(): any {
     let selections: any = {};
+
     if (Is.array(this.data)) {
       for (let column of this.data) {
         selections[column] = 1;
@@ -39,8 +40,6 @@ export default class SelectPipeline
     } else {
       selections = this.data;
     }
-
-    console.log(selections);
 
     return selections;
   }

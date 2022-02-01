@@ -6,10 +6,10 @@ export default async function HomeController(
   request: Request,
   response: Response
 ) {
-  const user = new User();
+  // const user = new User();
 
-  const activeUsers = await user._.where("id", ">", 10).list();
+  // const activeUsers = await user._.where("id", ">", 10).list();
   response.send({
-    records: activeUsers,
+    records: [],
   });
 }
