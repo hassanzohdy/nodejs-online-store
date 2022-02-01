@@ -44,6 +44,11 @@
   resolved "https://registry.yarnpkg.com/@mongez/supportive-is/-/supportive-is-1.0.4.tgz#2414be9253309ff391f8fe2e58ba12d24cab8399"
   integrity sha512-SF5SDiEf3xzP9ALemyfkXzyjy5FQm+UyiN4QnbPprv2ZhPcJUdWyIJWds8Oom2ZDIKJlEkcjDmcob5Ku/mHcig==
 
+"@poppinss/traits@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@poppinss/traits/-/traits-1.0.1.tgz#a9376f815deea09d259c47bc0cf8b0d8a9b9c392"
+  integrity sha512-8fJ4sNswsuDWwUrUkzYbpY/5Z7JHSt5JSo+kMclGWcIKOEwOjKOuwyu8GazamwM657OmvOFUq08QguciQkQhAQ==
+
 "@sindresorhus/is@^0.14.0":
   version "0.14.0"
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"

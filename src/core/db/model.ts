@@ -1,42 +1,28 @@
-import { DynamicObject } from "utils/types";
-import database from ".";
+import applyMixins from "utils/mixins";
+import Attributes from "./Attributes";
 import databaseManager from "./DatabaseManager";
-import { modelsList } from "./models";
-import QueryBuilder from "./QueryBuilder";
-import { BaseSchema } from "./types";
+import ModelQuickAccessors from "./ModelQuickAccessors";
 
-function proxy<T>(object: any, handler: any): T {
-  return new Proxy(object, handler);
-}
-
-export default abstract class Model<Schema> {
+abstract class BaseModel<Schema> {
   /**
    * Dynamic call for attributes
    */
   [key: string]: any;
   /**
-   * Model attributes
-   */
-  public attributes: any = {};
-
-  /**
-   * {@inheritDoc}
-   */
-  public static collection: string = "users";
-
-  /**
    * Constructor
    */
   public constructor(attributes: Schema = {} as Schema) {
-    this.attributes = attributes;
-
     /**
      * Constructor
      */
     this.attributes = { ...attributes };
-    return proxy<Model<Schema>>(this, {
+    return new Proxy<BaseModel<Schema>>(this, {
       set: (model: any, name: string, value: any): boolean => {
-        model.attributes[name] = value;
+        if (model[name]) {
+          model[name] = value;
+        } else {
+          model.attributes[name] = value;
+        }
         return true;
       },
       get: (model: any, key: string): any => {
@@ -55,56 +41,50 @@ export default abstract class Model<Schema> {
   }
 
   /**
-   * Merge the given attributes to current attributes
-   */
-  public setAttributes<T>(attributes: T): Model<Schema> {
-    this.attributes = { ...this.attributes, ...attributes };
-
-    return this;
-  }
-
-  /**
    * Save data into database
    */
-  public async save(): Promise<any> {
+  public async save(newAttributes: any = {}): Promise<any> {
     if (this.id) {
-      this.updatedAt = new Date();
-      return await Model.query.update({ id: this.id }, this.attributes);
+      return this.update(newAttributes);
     }
+
+    return this.insert(newAttributes);
+  }
+
+  /**
+   * Insert new record
+   */
+  public async insert(newAttributes: any = {}): Promise<any> {
     this.createdAt = new Date();
     this.updatedAt = new Date();
-    this.id = databaseManager.newId(Model.collection);
-    return await Model.query.insert(this.attributes);
+    this.setAttributes(newAttributes);
+
+    if (!this.id) {
+      this.id = await databaseManager.newId(ModelQuickAccessors.collection);
+    }
+
+    return await ModelQuickAccessors.query.insert(this.attributes);
   }
 
   /**
-   * Find Record by id and return new instance of model
+   * Update data
    */
-  public static async find<T>(id: number): Promise<Model<T> | null> {
-    const record = await this.query.first({
-      id,
-    });
-
-    if (!record) return null;
-
-    return new modelsList[this.collection](record as T);
-  }
-
-  /**
-   * Find list of records based on the given filter and return list of models
-   */
-  public static async list<T>(attributes: any = {}): Promise<T[]> {
-    const records = await this.query.list(attributes);
-
-    if (!records) return [];
-
-    return records.map((record) => new modelsList[this.collection](record));
-  }
-
-  /**
-   * Get query builder
-   */
-  public static get query() {
-    return database.query(this.collection);
+  public async update(newAttributes: any = {}): Promise<any> {
+    this.updatedAt = new Date();
+    this.setAttributes(newAttributes);
+    return await ModelQuickAccessors.query.update(
+      { id: this.id },
+      this.attributes
+    );
   }
 }
+
+// @see https://www.typescriptlang.org/docs/handbook/mixins.html#alternative-pattern
+interface BaseModel<Schema>
+  extends Attributes<Schema>,
+    ModelQuickAccessors<Schema> {}
+applyMixins(BaseModel, [Attributes]);
+
+const Model = BaseModel;
+
+export default Model;

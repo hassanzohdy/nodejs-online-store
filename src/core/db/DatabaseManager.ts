@@ -11,16 +11,18 @@ export class DatabaseManager {
    * Generate new id and store it in the collections's collection
    *
    */
-  public newId(collectionName: string): number {
-    const nextId: number = this.getNextId(collectionName);
+  public async newId(collectionName: string): Promise<number> {
+    const nextId: number = await this.getNextId(collectionName);
 
-    this.query.updateOne(
+    await this.query.updateOne(
       {
         collection: collectionName,
       },
       {
-        collection: collectionName,
-        id: nextId,
+        $set: {
+          collection: collectionName,
+          id: nextId,
+        },
       },
       {
         upsert: true,
@@ -33,8 +35,8 @@ export class DatabaseManager {
   /**
    * Get next for the given collection name
    */
-  public getNextId(collectionName: string): number {
-    const collection: any = this.query.findOne({
+  public async getNextId(collectionName: string): Promise<number> {
+    const collection: any = await this.query.findOne({
       collection: collectionName,
     });
 

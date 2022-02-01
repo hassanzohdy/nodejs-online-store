@@ -71,7 +71,7 @@ export default class QueryBuilder {
   /**
    * Get next id for current collection
    */
-  public get nextId(): number {
+  public get nextId(): Promise<number> {
     return databaseManager.getNextId(this.collection);
   }
 
