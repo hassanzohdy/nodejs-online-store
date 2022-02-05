@@ -117,7 +117,7 @@ abstract class BaseModel<Schema> {
     }
 
     const data: any = await this.query.insert(
-      this.castAttributes(this.attributes)
+      this.castAttributesIn(this.attributes)
     );
 
     this._id = data.insertedId;
@@ -139,12 +139,16 @@ abstract class BaseModel<Schema> {
     BaseModel.trigger(this.collection, "updating", this);
     BaseModel.trigger(this.collection, "saving", this, "update");
 
-    log(this.castAttributes(this.attributes));
+    log(this.castAttributesIn(this.attributes));
 
     this.updatedAt = now();
     const result = await this.query.update(
       { id: this.id },
-      this.castAttributes(this.attributes)
+      {
+        $set: {
+          ...this.castAttributesIn(this.attributes),
+        },
+      }
     );
 
     BaseModel.trigger(

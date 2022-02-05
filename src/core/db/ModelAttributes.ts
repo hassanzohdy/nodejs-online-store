@@ -67,6 +67,54 @@ export default class ModelAttributes<Schema> {
   }
 
   /**
+   * Cast the given attribute key based on the value in the attributes list to be stored in database
+   */
+  public castAttributeIn(attributes: any): any {
+    const castsList = { ...this.defaultCasts, ...this.casts };
+    const newAttributes: DynamicObject = {};
+
+    for (let attribute in attributes) {
+      let value = attributes[attribute];
+
+      if (Is.plainObject(value)) {
+        value = this.castAttributeIn(value);
+      }
+
+      const castMode: CastType = castsList[attribute];
+
+      if (!castMode) {
+        newAttributes[attribute] = value;
+        continue;
+      }
+
+      switch (castMode) {
+        case "bool":
+        case "boolean":
+          value = Boolean(value);
+          break;
+        case "int":
+        case "integer":
+          value = Number(value);
+          break;
+        case "string":
+          value = String(value);
+          break;
+        case "float":
+        case "double":
+          value = parseFloat(value);
+          break;
+        case "date":
+          value = date(value).toJSDate();
+          break;
+      }
+
+      newAttributes[attribute] = value;
+    }
+
+    return newAttributes;
+  }
+
+  /**
    * An alias to set an attribute
    */
   public setAttribute(column: string, value: any): ModelAttributes<Schema> {

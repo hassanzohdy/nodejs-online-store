@@ -1,7 +1,7 @@
 import database from "./database";
 import Aggregate from "./aggregate";
 import Is from "@mongez/supportive-is";
-import { Collection, Filter } from "mongodb";
+import { Collection, Filter, UpdateFilter } from "mongodb";
 import databaseManager from "./DatabaseManager";
 
 export default class QueryBuilder {
@@ -54,7 +54,7 @@ export default class QueryBuilder {
   /**
    * Update data based on the given search
    */
-  public async update(search: any, data: any): Promise<any> {
+  public async update(search: any, data: UpdateFilter<any>): Promise<any> {
     return await this.query.updateMany(search, data);
   }
 
