@@ -432,6 +432,13 @@ abstract class BaseModel<Schema> {
   public toJSON(): any {
     return this.data;
   }
+
+  /**
+   * Remove all data from users data
+   */
+  public static async truncate(): Promise<any> {
+    await databaseManager.truncate(this.collection);
+  }
 }
 
 interface BaseModel<Schema> extends ModelAttributes<Schema> {}

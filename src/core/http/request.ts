@@ -36,7 +36,12 @@ export class Request implements AppRequest {
    * Get all inputs from query string params and request payload
    */
   public all(): any {
-    return { ...this.query, ...this.payload };
+    const inputs: any = { ...this.query, ...this.payload };
+    for (let input in inputs) {
+      inputs[input] = cast(inputs[input]);
+    }
+
+    return inputs;
   }
 
   /**
