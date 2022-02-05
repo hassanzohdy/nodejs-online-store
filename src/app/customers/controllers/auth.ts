@@ -1,0 +1,104 @@
+import request, { Request } from "core/http/request";
+import { Response } from "core/http/response";
+import { validate } from "@mongez/validator";
+import Is from "@mongez/supportive-is";
+import User, { UserSchema } from "../../models/User";
+import hash from "core/hash";
+import { jwt } from "core/auth";
+import { attempt, user } from "core/auth/guard";
+
+export async function register(request: Request, response: Response) {
+  const userData = request.only("email", "name", "password");
+
+  userData.password = hash.make(userData.password);
+
+  const accessToken = jwt.generate(userData);
+
+  userData.accessTokens = [accessToken];
+
+  const user = await User.create<UserSchema>(userData);
+
+  return response.success({
+    record: {
+      ...user.only("id", "name", "email"),
+      accessToken,
+    },
+  });
+}
+
+export async function login(request: Request, response: Response) {
+  await attempt(request.only("email"));
+  const userModel: User<UserSchema> = user();
+
+  if (!userModel) {
+    return response.unauthorized({
+      error: "Invalid Login",
+    });
+  }
+
+  const accessToken = jwt.generate(userModel.data);
+
+  userModel.accessTokens.push(accessToken);
+
+  await userModel.save();
+
+  return response.success({
+    record: {
+      ...userModel.only("id", "name", "email"),
+      accessToken,
+    },
+  });
+}
+
+class Validator {
+  public inputs: any = {};
+  public rulesMapping: any = {
+    required: {
+      required: true,
+    },
+    email: {
+      type: "email",
+    },
+  };
+
+  rules(rules: any): Validator {
+    for (let input in rules) {
+      let value = request.input(input);
+      const inputRules = rules[input];
+      this.inputs[input] = {
+        value,
+        rules: inputRules,
+      };
+    }
+
+    return this;
+  }
+
+  scan() {
+    for (let input in this.inputs) {
+      const inputOptions = this.inputs[input];
+      const convertedProps = this.mapRules(inputOptions.rules);
+      const validator = validate(inputOptions.value, {}, []);
+    }
+  }
+
+  public mapRules(rules: any): any {
+    if (Is.string(rules)) {
+      rules = rules.split("|");
+    }
+
+    let props = {};
+
+    if (Is.array(rules)) {
+    }
+  }
+}
+
+register.validate = (
+  validator: Validator,
+  request: Request,
+  response: Response
+) => {
+  //   const validator = new Validator();
+  validator;
+};

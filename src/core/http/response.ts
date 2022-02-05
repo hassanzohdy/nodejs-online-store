@@ -22,6 +22,13 @@ export class Response {
   }
 
   /**
+   * Send success response
+   */
+  public success(data: any): any {
+    return this.send(data, 200);
+  }
+
+  /**
    * Send bad request response
    */
   public badRequest(data: any): void {
