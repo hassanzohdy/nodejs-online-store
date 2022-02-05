@@ -139,9 +139,8 @@ abstract class BaseModel<Schema> {
     BaseModel.trigger(this.collection, "updating", this);
     BaseModel.trigger(this.collection, "saving", this, "update");
 
-    log(this.castAttributesIn(this.attributes));
-
     this.updatedAt = now();
+
     const result = await this.query.update(
       { id: this.id },
       {

@@ -69,7 +69,7 @@ export default class ModelAttributes<Schema> {
   /**
    * Cast the given attribute key based on the value in the attributes list to be stored in database
    */
-  public castAttributeIn(attributes: any): any {
+  public castAttributesIn(attributes: any): any {
     const castsList = { ...this.defaultCasts, ...this.casts };
     const newAttributes: DynamicObject = {};
 
@@ -77,7 +77,7 @@ export default class ModelAttributes<Schema> {
       let value = attributes[attribute];
 
       if (Is.plainObject(value)) {
-        value = this.castAttributeIn(value);
+        value = this.castAttributesIn(value);
       }
 
       const castMode: CastType = castsList[attribute];
