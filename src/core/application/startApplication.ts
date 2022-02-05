@@ -31,17 +31,11 @@ export default function startApplication() {
 
   router.scan(app);
 
-  app.use(
-    (
-      request: Express.Request,
-      response: Express.Response,
-      next: NextFunction
-    ): any => {
-      console.log(2);
-    }
-  );
-
   app.listen(port, () => {
-    log(`Server Started!, app path http://localhost:${chalk.bold.cyan(port)}`);
+    log(
+      `Server Started!, app path ${
+        applicationConfigurations.baseUrl
+      }:${chalk.bold.cyan(port)}`
+    );
   });
 }

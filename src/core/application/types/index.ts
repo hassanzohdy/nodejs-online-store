@@ -1,5 +1,9 @@
 export type ApplicationConfigurations = {
   /**
+   * Application base url
+   */
+  baseUrl: string;
+  /**
    * Application port
    */
   port: number;

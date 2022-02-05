@@ -41,15 +41,18 @@ class Database {
     });
 
     this.databaseConfigurations = databaseConfigurations;
+    try {
+      await this.client.connect();
 
-    await this.client.connect();
+      this.setDatabase(databaseConfigurations.databaseName);
 
-    this.setDatabase(databaseConfigurations.databaseName);
-
-    setTimeout(() => {
-      log(chalk.greenBright("Connected To Database Successfully!"));
-      this.trigger("connection", this);
-    }, 100);
+      setTimeout(() => {
+        log(chalk.greenBright("Connected To Database Successfully!"));
+        this.trigger("connection", this);
+      }, 100);
+    } catch (error) {
+      log(error);
+    }
   }
 
   /**
