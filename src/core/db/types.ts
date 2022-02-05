@@ -186,6 +186,11 @@ export interface AggregateInterface {
   list<T>(selectColumns?: DatabaseSelect): Promise<Collection<T | any>>;
 
   /**
+   * Paginate data
+   */
+  paginate<T>(paginationSetup?: PaginationSetup): Promise<PaginationData>;
+
+  /**
    * Get only first matched record
    */
   first<T>(selectColumns?: string[] | DynamicObject): Promise<T>;
@@ -217,6 +222,21 @@ export interface AggregateInterface {
    */
   remove(options?: DeleteOptions): Promise<DeleteResult>;
 }
+
+export type PaginationSetup = {
+  page?: number;
+  size?: number;
+};
+
+export type PaginationData = {
+  records: Collection<any>;
+  info: {
+    totalRecords: number;
+    page: number;
+    size: number;
+    lastPage: number;
+  };
+};
 
 export type ModelsList = {
   [collectionName: string]: any;

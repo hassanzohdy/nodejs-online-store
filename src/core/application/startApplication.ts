@@ -1,11 +1,12 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import { applicationConfigurations, databaseConfigurations } from "config";
 import { log } from "../log";
 import chalk from "chalk";
 import multer from "multer";
-import auth from "app/middleware/auth";
 import router from "../router";
 import database from "../db";
+import auth from "../auth/middleware/auth";
+import middlewareList from "../router/middleware";
 
 export default function startApplication() {
   const app = express();
@@ -26,10 +27,19 @@ export default function startApplication() {
   // for form-urlencoded
   app.use(express.urlencoded({ extended: true }));
 
-  // auth
-  app.use(auth);
+  middlewareList.list().map((middleware) => app.use(middleware));
 
   router.scan(app);
+
+  app.use(
+    (
+      request: Express.Request,
+      response: Express.Response,
+      next: NextFunction
+    ): any => {
+      console.log(2);
+    }
+  );
 
   app.listen(port, () => {
     log(`Server Started!, app path http://localhost:${chalk.bold.cyan(port)}`);

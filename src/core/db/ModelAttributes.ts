@@ -88,4 +88,32 @@ export default class ModelAttributes<Schema> {
   public getAttribute(attribute: string, defaultValue: any = null): any {
     return Obj.get(this.attributes, attribute, defaultValue);
   }
+
+  /**
+   * Get attributes data
+   */
+  public get data(): Schema {
+    return this.castAttributes(this.attributes) as Schema;
+  }
+
+  /**
+   * Cast the given attributes based on the model castings
+   */
+  public castAttributes(attributes: DynamicObject): any {
+    const newAttributes: DynamicObject = {};
+
+    for (let attribute in attributes) {
+      newAttributes[attribute] = this.castAttribute(attribute);
+    }
+
+    return newAttributes;
+  }
+
+  /**
+   * Get only the values of the given attributes
+   */
+  public only<T>(...attributes: (keyof T)[]): T {
+    const alteredAttributes = Obj.only(this.attributes, attributes as any);
+    return this.castAttributes(alteredAttributes) as T;
+  }
 }

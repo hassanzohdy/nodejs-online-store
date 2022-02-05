@@ -17,6 +17,8 @@ import {
   DataUpdate,
   LogicalOperator,
   OrderBySchema,
+  PaginationData,
+  PaginationSetup,
   Pipeline,
   Value,
   WhereArrayHasNoOperator,
@@ -324,6 +326,55 @@ export default class Aggregate implements AggregateInterface {
     }
 
     return collect<T>(records);
+  }
+
+  /**
+   * Paginate data
+   */
+  public async paginate<T>(
+    paginationSetup?: PaginationSetup
+  ): Promise<PaginationData> {
+    let setup: PaginationSetup = {
+      page: 1,
+      size: 25,
+      ...paginationSetup,
+    };
+
+    const page: number = setup.page!;
+
+    const size: number = setup.size!;
+    const skip: number = (page - 1) * size;
+
+    const results = await this.query
+      .aggregate([
+        ...this.parse(),
+        {
+          $facet: {
+            results: [
+              {
+                $count: "totalDocuments",
+              },
+            ],
+          },
+        },
+      ])
+      .toArray();
+
+    const totalRecords: number = results[0].results[0].totalDocuments;
+
+    this.skip(skip).limit(size);
+
+    const records = await this.list<T>();
+
+    return {
+      records: records,
+      info: {
+        totalRecords,
+        page,
+        size: records.toArray().length,
+        lastPage: Math.ceil(totalRecords / size),
+      },
+    } as PaginationData;
   }
 
   /**

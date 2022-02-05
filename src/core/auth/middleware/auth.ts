@@ -1,6 +1,7 @@
 import { authConfigurations } from "config";
 import { NextFunction, Request, Response } from "express";
-import { guarded } from "../guard";
+import { attempt } from "../guard";
+import { authErrors } from "./errors";
 
 export default async function auth(
   request: Request,
@@ -12,7 +13,7 @@ export default async function auth(
   const authorization: string | undefined = request.headers.authorization;
 
   if (authorization === undefined) {
-    return response.send("Unauthorized Request,  Code 4001.");
+    return response.send(authErrors.missingAuthorization);
   }
 
   const [authorizationType, authorizationValue] = authorization.split(" ");
@@ -22,24 +23,24 @@ export default async function auth(
   let authValue: string = authorizationValue.trim();
 
   if (!authType || !authValue) {
-    return response.send("Unauthorized Request,  Code 4002.");
+    return response.send(authErrors.missingAuthTypeOrValue);
   }
 
   if (!["bearer", "key"].includes(authType)) {
-    return response.send("Unauthorized Request,  Code 4003.");
+    return response.send(authErrors.invalidAuthType);
   }
 
   if (authType === "key" && authValue !== apiKey) {
-    return response.send("Invalid Api Key, Code 4004.");
+    return response.send(authErrors.invalidApiKey);
   }
 
   if (authType == "bearer") {
     if (
-      !(await guarded({
+      !(await attempt({
         accessTokens: authValue,
       }))
     ) {
-      return response.send("Unauthorized Request Code 4005.");
+      return response.send(authErrors.invalidUser);
     }
   }
 

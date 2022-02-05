@@ -9,35 +9,14 @@ export default class OrderByPipeline
   /**
    * {@inheritdoc}
    */
-  public name: string = "sort";
+  public name: string = "skip";
 
   /**
    * Set pipeline data
    */
-  public setData(columns: OrderBySchema): Pipeline {
-    this.data = columns;
+  public setData(skip: number): Pipeline {
+    this.data = skip;
 
     return this;
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public parseData(): any {
-    const columns: any = {};
-
-    for (let column in this.data) {
-      let orderValue: string | number = this.data[column];
-
-      if (String(orderValue).toLocaleLowerCase() === "desc") {
-        orderValue = -1;
-      } else if (String(orderValue).toLocaleLowerCase() === "asc") {
-        orderValue = 1;
-      }
-
-      columns[column] = orderValue;
-    }
-
-    return columns;
   }
 }

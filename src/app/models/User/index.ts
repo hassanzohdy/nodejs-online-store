@@ -15,6 +15,12 @@ export default class User<UserSchema> extends BasModel<UserSchema> {
    * {@inheritDoc}
    */
   public static collection: string = "users";
+  /**
+   * {@inheritDoc}
+   */
+  public get sharedData(): any {
+    return this.only("id", "email", "name", "isActive");
+  }
 }
 
 database.defineModel(User.collection, User);

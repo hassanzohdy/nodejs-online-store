@@ -1,4 +1,5 @@
 import Is from "@mongez/supportive-is";
+import { DateTime } from "luxon";
 import PipelineManager from "../pipeline";
 import { LogicalOperator, Pipeline } from "../types";
 import { parseOperator } from "../utils";
@@ -66,6 +67,10 @@ export default class MatchPipeline extends PipelineManager implements Pipeline {
 
     if (operator === "like") {
       value = new RegExp(value);
+    }
+
+    if (value instanceof DateTime) {
+      value = value.toJSDate();
     }
 
     const data = {

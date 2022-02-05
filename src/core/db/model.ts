@@ -84,26 +84,6 @@ abstract class BaseModel<Schema> {
   }
 
   /**
-   * Get attributes data
-   */
-  public get data(): Schema {
-    return this.castAttributes(this.attributes) as Schema;
-  }
-
-  /**
-   * Cast the given attributes based on the model castings
-   */
-  public castAttributes(attributes: DynamicObject): Schema {
-    const newAttributes: DynamicObject = {};
-
-    for (let attribute in attributes) {
-      newAttributes[attribute] = this.castAttribute(attribute);
-    }
-
-    return newAttributes as Schema;
-  }
-
-  /**
    * Save data into database
    */
   public async save(newAttributes: any = {}): Promise<any> {
@@ -433,10 +413,26 @@ abstract class BaseModel<Schema> {
     const base: any = <typeof BaseModel>this.constructor;
     return base[property];
   }
+
+  /**
+   * Shared data
+   */
+  public get sharedData(): Schema {
+    return this.data;
+  }
+
+  /**
+   * One model serializing to json
+   */
+  public toJSON(): any {
+    return this.data;
+  }
 }
 
 interface BaseModel<Schema> extends ModelAttributes<Schema> {}
 applyMixins(BaseModel, [ModelAttributes]);
+
+export interface ModelInterface<Schema> extends BaseModel<Schema> {}
 
 const Model = BaseModel;
 

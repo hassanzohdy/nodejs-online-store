@@ -3,9 +3,9 @@ import database from "core/db";
 import { log } from "core/log";
 import { now } from "utils/date";
 import { sha1 } from "@mongez/encryption";
-import { CreateIndexesOptions, IndexSpecification } from "mongodb";
-import Migration, { MigrationSchema } from "./models/Migration";
 import databaseManager from "./DatabaseManager";
+import Migration, { MigrationSchema } from "./models/Migration";
+import { CreateIndexesOptions, IndexSpecification } from "mongodb";
 
 export default class Blueprint<Schema> {
   /**

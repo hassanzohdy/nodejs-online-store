@@ -1,4 +1,8 @@
-import { NextFunction, Request as ExpressRequest } from "express";
+import {
+  NextFunction,
+  Request as ExpressRequest,
+  Response as ExpressResponse,
+} from "express";
 import { Response } from "../../http/response";
 import { Request as AppRequest } from "../../http/types/request";
 
@@ -14,7 +18,7 @@ export type RequestHandler = (request: AppRequest, response: Response) => any;
  */
 export type RequestMiddleware = (
   request: ExpressRequest,
-  response: Response,
+  response: ExpressResponse,
   next: NextFunction
 ) => any;
 
