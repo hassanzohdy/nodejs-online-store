@@ -31,7 +31,7 @@ export const databaseConfigurations: DatabaseConfigurations = {
   username: "root",
   password: "HASAN_2022",
   port: 27017,
-  server: "localhost",
+  server: "127.0.0.1",
 };
 
 export const authConfigurations: AuthConfigurations = {

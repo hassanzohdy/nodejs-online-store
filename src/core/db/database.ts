@@ -48,6 +48,7 @@ class Database {
       await this.client.connect();
 
       this.setDatabase(databaseConfigurations.databaseName);
+      log("OK");
 
       setTimeout(() => {
         log(chalk.greenBright("Connected To Database Successfully!"));
