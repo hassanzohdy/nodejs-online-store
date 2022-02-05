@@ -31,6 +31,8 @@ export async function login(request: Request, response: Response) {
   await attempt(request.only("email"));
   const userModel: User<UserSchema> = user();
 
+  console.log(request.input("password"));
+
   if (
     !userModel ||
     !hash.verify(userModel.data.password, request.input("password"))
