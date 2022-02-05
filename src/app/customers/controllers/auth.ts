@@ -7,10 +7,14 @@ import hash from "core/hash";
 import { jwt } from "core/auth";
 import { attempt, user } from "core/auth/guard";
 import { Random } from "@mongez/reinforcements";
+import { log } from "core/log";
 
 export async function register(request: Request, response: Response) {
   await User.truncate();
   const userData = request.only("email", "name", "password");
+
+  log(request.only("email"));
+  log(await User.first(request.only("email")));
 
   if (await User.first(request.only("email"))) {
     return response.badRequest({
