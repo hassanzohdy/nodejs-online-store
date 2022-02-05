@@ -6,6 +6,7 @@ import User, { UserSchema } from "../../models/User";
 import hash from "core/hash";
 import { jwt } from "core/auth";
 import { attempt, user } from "core/auth/guard";
+import { Random } from "@mongez/reinforcements";
 
 export async function register(request: Request, response: Response) {
   const userData = request.only("email", "name", "password");
@@ -36,7 +37,9 @@ export async function login(request: Request, response: Response) {
     });
   }
 
-  const accessToken = jwt.generate(userModel.data);
+  const accessToken = jwt.generate({
+    key: Random.string(96),
+  });
 
   userModel.accessTokens.push(accessToken);
 
