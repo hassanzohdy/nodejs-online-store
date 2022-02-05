@@ -11,6 +11,7 @@ const secretKey: string = "mySecret";
 export const applicationConfigurations: ApplicationConfigurations = {
   port: 3000,
   baseUrl: "http://localhost",
+  appPath: "/store",
   locale: "en",
   date: {
     format: "dd-MM-y",

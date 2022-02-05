@@ -13,7 +13,7 @@ import {
 } from "express";
 import { error } from "core/log";
 import chalk from "chalk";
-import { routerConfigurations } from "config";
+import { applicationConfigurations, routerConfigurations } from "config";
 import concatRoute from "@mongez/concat-route";
 import request from "../http/request";
 import response from "../http/response";
@@ -121,7 +121,11 @@ class Router {
         },
       ];
 
-      route.path = concatRoute(routerConfigurations.prefix!, route.path);
+      route.path = concatRoute(
+        applicationConfigurations.appPath,
+        routerConfigurations.prefix!,
+        route.path
+      );
 
       this.app[route.method!](route.path, ...(handlers as any));
     }

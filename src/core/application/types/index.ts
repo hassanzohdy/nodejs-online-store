@@ -4,6 +4,10 @@ export type ApplicationConfigurations = {
    */
   baseUrl: string;
   /**
+   * App path, usually / if the app is in the root
+   */
+  appPath: string;
+  /**
    * Application port
    */
   port: number;
