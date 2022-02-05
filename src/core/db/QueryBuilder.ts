@@ -3,6 +3,7 @@ import Aggregate from "./aggregate";
 import Is from "@mongez/supportive-is";
 import { Collection, Filter, UpdateFilter } from "mongodb";
 import databaseManager from "./DatabaseManager";
+import { log } from "../log";
 
 export default class QueryBuilder {
   /**

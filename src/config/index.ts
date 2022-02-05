@@ -31,6 +31,7 @@ export const databaseConfigurations: DatabaseConfigurations = {
   databaseName: "onlineStore",
   username: "root",
   password: "HASAN_2022",
+  // password: "BaseRoot",
   port: 27017,
   server: "127.0.0.1",
 };
