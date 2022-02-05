@@ -12,7 +12,7 @@ export async function register(request: Request, response: Response) {
   await User.truncate();
   const userData = request.only("email", "name", "password");
 
-  if (await attempt(request.only("email"))) {
+  if (await User.first(request.only("email"))) {
     return response.badRequest({
       error: "You are already registered before, please login.",
     });
