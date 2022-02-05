@@ -11,6 +11,7 @@ const operators: OperatorsList = {
   "<=": "$lte",
   in: "$in",
   notIn: "$nin",
+  like: "$regex",
   "!=": "$ne",
   not: "$ne",
 };

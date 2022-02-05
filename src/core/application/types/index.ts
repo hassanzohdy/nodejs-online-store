@@ -4,7 +4,17 @@ export type ApplicationConfigurations = {
    */
   port: number;
   /**
-   * Application api key
+   * App locale code
    */
-  apiKey: string;
+  locale: string;
+  /**
+   * Date configurations
+   */
+  date?: {
+    timezone?: string;
+    /**
+     * @see https://moment.github.io/luxon/#/parsing?id=table-of-tokens
+     */
+    format?: string;
+  };
 };

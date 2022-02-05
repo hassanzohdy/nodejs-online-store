@@ -6,6 +6,8 @@ import {
   UpdateOptions,
   UpdateResult,
 } from "mongodb";
+import { DateTime } from "luxon";
+import { Collection } from "collect.js";
 
 export type DatabaseConfigurations = {
   /**
@@ -88,6 +90,7 @@ export type DatabaseOperator =
   | `in`
   | `notIn`
   | "!="
+  | "like"
   | `not`;
 
 export type OperatorsList = {
@@ -104,6 +107,7 @@ export type Column = string;
 export type Value = any;
 
 export type WhereArrayHasNoOperator = [Column, Value];
+
 /**
  * Where clause with an array of arrays, each array has three elements
  */
@@ -154,6 +158,14 @@ export interface AggregateInterface {
   ): AggregateInterface;
 
   /**
+   * Where like clause
+   */
+  whereLike(column: Column, value: Value): AggregateInterface;
+  /**
+   * Define the associated model for this aggregate instance
+   */
+  withModel(modelName: string): AggregateInterface;
+  /**
    * Limit clause
    */
   limit(limit: number): AggregateInterface;
@@ -171,12 +183,12 @@ export interface AggregateInterface {
   /**
    * List all records
    */
-  list(selectColumns?: DatabaseSelect): Promise<any[]>;
+  list<T>(selectColumns?: DatabaseSelect): Promise<Collection<T | any>>;
 
   /**
    * Get only first matched record
    */
-  first(selectColumns?: string[] | DynamicObject): Promise<any>;
+  first<T>(selectColumns?: string[] | DynamicObject): Promise<T>;
 
   /**
    * Perform updates based on the pipelines
@@ -213,6 +225,32 @@ export type ModelsList = {
 export type BaseSchema = {
   id?: number;
   _id?: string;
-  createdAt?: Date;
-  updatedAt?: Date;
+  createdAt?: Date | DateTime;
+  updatedAt?: Date | DateTime;
 };
+
+export type CastType =
+  | "string"
+  | "int"
+  | "integer"
+  | "float"
+  | "double"
+  | "boolean"
+  | "bool"
+  | "date";
+
+export type AttributesCasts = {
+  [column: string]: CastType;
+};
+
+export type ModelEventName =
+  | "creating"
+  | "create"
+  | "updating"
+  | "update"
+  | "saving"
+  | "save"
+  | "deleting"
+  | "delete"
+  | "fetching"
+  | "fetch";

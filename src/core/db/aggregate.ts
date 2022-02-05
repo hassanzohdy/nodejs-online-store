@@ -3,6 +3,7 @@ import {
   Collection,
   DeleteOptions,
   DeleteResult,
+  Document,
   UpdateOptions,
 } from "mongodb";
 import LimitPipeline from "./pipelines/limit-pipeline";
@@ -22,10 +23,12 @@ import {
   WhereArrayHasOperator,
   WhereSearchingAsObject,
 } from "./types";
-import { log } from "../log";
 import OrderByPipeline from "./pipelines/skip-pipeline";
 import SelectPipeline from "./pipelines/select-pipeline";
 import UnselectPipeline from "./pipelines/unselect-pipeline";
+import collect, { Collection as ArrayCollection } from "collect.js";
+import { newModel } from "./models";
+import { log } from "../log";
 
 // typescript function overload
 export default class Aggregate implements AggregateInterface {
@@ -33,6 +36,11 @@ export default class Aggregate implements AggregateInterface {
    * Pipelines list
    */
   public pipelines: any[] = [];
+
+  /**
+   * If defined, then the returned data from the `first` and `list` will be returned as Model
+   */
+  protected modelName!: string;
 
   /**
    * Constructor
@@ -175,6 +183,13 @@ export default class Aggregate implements AggregateInterface {
   }
 
   /**
+   * Where like clause
+   */
+  public whereLike(column: Column, value: Value): AggregateInterface {
+    return this.where(column, "like", value);
+  }
+
+  /**
    * Where not clause
    */
   public whereNot(
@@ -231,6 +246,14 @@ export default class Aggregate implements AggregateInterface {
   }
 
   /**
+   * Define the associated model for this aggregate instance
+   */
+  public withModel(modelName: string): Aggregate {
+    this.modelName = modelName;
+    return this;
+  }
+
+  /**
    * Limit clause
    */
   public limit(limit: number): AggregateInterface {
@@ -277,26 +300,30 @@ export default class Aggregate implements AggregateInterface {
   }
 
   /**
+   * Get only first matched record
+   */
+  public async first<T>(columns?: DatabaseSelect): Promise<T> {
+    columns && this.select(columns);
+
+    return (await this.limit(1).list<T>()).first();
+  }
+
+  /**
    * Get the list of the documents for the processed pipelines
    */
-  public async list(columns?: DatabaseSelect): Promise<any[]> {
+  public async list<T>(columns?: DatabaseSelect): Promise<ArrayCollection<T>> {
     columns && this.select(columns);
     const records = await this.query.aggregate(this.parse()).toArray();
 
     this.reset();
 
-    return records;
-  }
+    if (this.modelName) {
+      return collect<T>(records).map((record) =>
+        newModel(this.modelName, record)
+      );
+    }
 
-  /**
-   * Get only first matched record
-   */
-  public async first(columns?: DatabaseSelect): Promise<any> {
-    columns && this.select(columns);
-
-    const records = await this.limit(1).list();
-
-    return records[0] || null;
+    return collect<T>(records);
   }
 
   /**

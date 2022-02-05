@@ -1,4 +1,6 @@
-// This can live anywhere in your codebase:
+/**
+// @see https://www.typescriptlang.org/docs/handbook/mixins.html#alternative-pattern
+ */
 export default function applyMixins(derivedCtor: any, constructors: any[]) {
   constructors.forEach((baseCtor) => {
     Object.getOwnPropertyNames(baseCtor.prototype).forEach((name) => {

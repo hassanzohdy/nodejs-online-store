@@ -46,9 +46,10 @@ class Database {
 
     this.setDatabase(databaseConfigurations.databaseName);
 
-    this.trigger("connection", this);
-
-    log(chalk.greenBright("Connected To Database Successfully!"));
+    setTimeout(() => {
+      log(chalk.greenBright("Connected To Database Successfully!"));
+      this.trigger("connection", this);
+    }, 100);
   }
 
   /**
@@ -92,9 +93,10 @@ class Database {
   /**
    * Store model in models list
    */
-  public defineModel<Schema>(collection: string, model: any) {
+  public defineModel(collection: string, model: any) {
     modelsList[collection] = model;
   }
+
   /**
    * Create new query builder for the given collection name
    */

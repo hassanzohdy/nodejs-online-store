@@ -2,4 +2,9 @@ import { ModelsList } from "./types";
 
 export const modelsList: ModelsList = {};
 
-export function newModel(model: any): any {}
+/**
+ * Get an instance of model
+ */
+export function newModel(modelCollection: any, record: any): any {
+  return new modelsList[modelCollection](record);
+}

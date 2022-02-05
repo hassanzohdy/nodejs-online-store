@@ -5,11 +5,7 @@ export type AccessToken = {
   /**
    * Generate new access token
    */
-  generate(
-    payload: DynamicObject,
-    expiresIn?: string | number | undefined,
-    moreOptions?: SignOptions
-  ): string;
+  generate(payload: DynamicObject, options?: SignOptions): string;
   /**
    * Verify the given cipher token and return the payload
    */
@@ -22,7 +18,6 @@ export type AccessToken = {
    */
   refreshToken(
     accessToken: string,
-    expiresIn?: string | number | undefined,
     refreshOptions?: SignOptions
   ): string | null;
 };

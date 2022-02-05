@@ -7,15 +7,7 @@ export const jwt: AccessToken = {
   /**
    * Generate new access token
    */
-  generate(
-    payload: DynamicObject,
-    expiresIn: string | number | undefined = undefined,
-    moreOptions: SignOptions = {}
-  ): string {
-    if (expiresIn) {
-      moreOptions.expiresIn = expiresIn;
-    }
-
+  generate(payload: DynamicObject, moreOptions: SignOptions = {}): string {
     return BaseJWT.sign(payload, authConfigurations.secretKey!, moreOptions);
   },
   /**
@@ -36,7 +28,6 @@ export const jwt: AccessToken = {
    */
   refreshToken(
     accessToken: string,
-    expiresIn: string | number | undefined = "365d",
     refreshOptions?: SignOptions
   ): string | null {
     const payload = jwt.verify(accessToken) as JwtPayload;
@@ -48,6 +39,6 @@ export const jwt: AccessToken = {
     delete payload.nbf;
     delete payload.jti;
 
-    return jwt.generate(payload, expiresIn, refreshOptions);
+    return jwt.generate(payload, refreshOptions);
   },
 };

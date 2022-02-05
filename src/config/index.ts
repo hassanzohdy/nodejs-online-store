@@ -4,12 +4,16 @@ import { RouterConfigurations } from "core/router";
 import { DatabaseConfigurations } from "core/db/types";
 import { ApplicationConfigurations } from "core/application";
 import { setEncryptionConfigurations } from "@mongez/encryption";
+import User from "app/models/User";
 
 const secretKey: string = "mySecret";
 
 export const applicationConfigurations: ApplicationConfigurations = {
   port: 3000,
-  apiKey: "thing",
+  locale: "en",
+  date: {
+    format: "dd-MM-y",
+  },
 };
 
 export const routerConfigurations: RouterConfigurations = {
@@ -31,4 +35,7 @@ export const databaseConfigurations: DatabaseConfigurations = {
 
 export const authConfigurations: AuthConfigurations = {
   secretKey: secretKey,
+  guard: User,
+  apiKey:
+    "AF2EWQDRGFTY5432WEDFGRTY5R432QWASDFGRT5R432QWSDFGTYR5432WEQSDFEGRT54",
 };

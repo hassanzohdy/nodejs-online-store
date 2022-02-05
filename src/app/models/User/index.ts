@@ -3,21 +3,18 @@ import BasModel from "core/db/model";
 import { BaseSchema } from "core/db/types";
 
 export type UserSchema = BaseSchema & {
-  name?: string;
-  password?: string;
-  email?: string;
+  name: string;
+  email: string;
+  password: string;
   isActive?: boolean;
+  accessTokens?: string[];
 };
 
-class Model<UserSchema> extends BasModel<UserSchema> {
+export default class User<UserSchema> extends BasModel<UserSchema> {
   /**
    * {@inheritDoc}
    */
   public static collection: string = "users";
 }
 
-const User = Model;
-
-database.defineModel(Model.collection, Model);
-
-export default User;
+database.defineModel(User.collection, User);

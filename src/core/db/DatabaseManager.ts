@@ -5,7 +5,7 @@ export class DatabaseManager {
   /**
    *  {@inheritdoc}
    */
-  protected collection: string = "collections";
+  public static collection: string = "informationSchema";
 
   /**
    * Generate new id and store it in the collections's collection
@@ -20,8 +20,16 @@ export class DatabaseManager {
       },
       {
         $set: {
-          collection: collectionName,
           id: nextId,
+        },
+        $setOnInsert: {
+          collection: collectionName,
+          migrations: [],
+          indexes: [],
+          totalDocuments: 0,
+          size: 0,
+          largestDocumentId: 0,
+          largestDocumentSize: 0,
         },
       },
       {
@@ -47,7 +55,106 @@ export class DatabaseManager {
    * Get query
    */
   public get query(): Collection {
-    return database.collection(this.collection);
+    return database.collection(DatabaseManager.collection);
+  }
+
+  /**
+   * Remove collection from the list
+   */
+  public async unset(collection: string): Promise<DatabaseManager> {
+    await this.query.deleteOne({
+      collection,
+    });
+    return this;
+  }
+
+  /**
+   * Clear the given collection documents and keep the collection
+   */
+  public async truncate(collection: string): Promise<DatabaseManager> {
+    await database.collection(collection).deleteMany({});
+
+    // reset the data
+    await this.query.updateOne(
+      {
+        collection,
+      },
+      {
+        $set: {
+          collection,
+          migrations: [],
+          indexes: [],
+          id: 0,
+          totalDocuments: 0,
+          size: 0,
+          largestDocumentId: 0,
+          largestDocumentSize: 0,
+        },
+      },
+      {
+        upsert: true,
+      }
+    );
+
+    return this;
+  }
+
+  /**
+   * Drop collection
+   */
+  public async drop(collection: string): Promise<any> {
+    await database.collection(collection).drop();
+    await this.unset(collection);
+  }
+
+  /**
+   * Add new index to the given collection information
+   */
+  public async addIndex(collection: string, data: any): Promise<any> {
+    return await this.query.updateOne(
+      {
+        collection,
+      },
+      {
+        $push: {
+          indexes: data,
+        },
+      }
+    );
+  }
+
+  /**
+   * Remove index from the indexes list
+   */
+  public async dropIndex(collection: string, indexName: string): Promise<any> {
+    return await this.query.updateOne(
+      {
+        collection,
+      },
+      {
+        $pull: {
+          indexes: {
+            index: indexName,
+          },
+        },
+      }
+    );
+  }
+
+  /**
+   * Get information of the given collection name
+   */
+  public async informationOf(collection: string): Promise<any> {
+    return await this.query.findOne({
+      collection,
+    });
+  }
+
+  /**
+   * Get all collections in the current database
+   */
+  public async listCollections(): Promise<any[]> {
+    return await database.db.listCollections().toArray();
   }
 }
 

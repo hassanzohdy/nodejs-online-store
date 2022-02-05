@@ -3,7 +3,6 @@ import Aggregate from "./aggregate";
 import Is from "@mongez/supportive-is";
 import { Collection, Filter } from "mongodb";
 import databaseManager from "./DatabaseManager";
-import { log } from "console";
 
 export default class QueryBuilder {
   /**
@@ -55,8 +54,15 @@ export default class QueryBuilder {
   /**
    * Update data based on the given search
    */
-  public async update(search: any, data: any) {
-    return await this.query.updateOne(search, data);
+  public async update(search: any, data: any): Promise<any> {
+    return await this.query.updateMany(search, data);
+  }
+
+  /**
+   * Delete multiple records
+   */
+  public async delete(filter: any = {}): Promise<any> {
+    return this.query.deleteMany(filter);
   }
 
   /**

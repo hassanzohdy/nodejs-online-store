@@ -60,6 +60,14 @@ export default class MatchPipeline extends PipelineManager implements Pipeline {
       operator = "=";
     }
 
+    if (value instanceof RegExp && operator === "=") {
+      operator = "like";
+    }
+
+    if (operator === "like") {
+      value = new RegExp(value);
+    }
+
     const data = {
       column,
       value,
