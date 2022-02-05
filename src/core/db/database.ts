@@ -41,6 +41,9 @@ class Database {
     });
 
     this.databaseConfigurations = databaseConfigurations;
+
+    log(chalk.yellow(`Connecting to ${chalk.cyanBright.bold(url)}...`));
+
     try {
       await this.client.connect();
 
@@ -52,6 +55,7 @@ class Database {
       }, 100);
     } catch (error) {
       log(error);
+      throw error;
     }
   }
 

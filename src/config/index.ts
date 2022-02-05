@@ -28,8 +28,8 @@ setEncryptionConfigurations({
 
 export const databaseConfigurations: DatabaseConfigurations = {
   databaseName: "onlineStore",
-  password: "BaseRoot",
   username: "root",
+  password: "HASAN_2022",
   port: 27017,
   server: "localhost",
 };
