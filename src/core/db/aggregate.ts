@@ -360,7 +360,7 @@ export default class Aggregate implements AggregateInterface {
       ])
       .toArray();
 
-    const totalRecords: number = results[0].results[0].totalDocuments;
+    const totalRecords: number = results[0]?.results[0]?.totalDocuments ?? 0;
 
     this.skip(skip).limit(size);
 
