@@ -4,7 +4,7 @@ import {
   Response as ExpressResponse,
 } from "express";
 import { Response } from "../../http/response";
-import { Request as AppRequest } from "../../http/types/request";
+import { Request as AppRequest } from "../../http/request";
 
 export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";
 

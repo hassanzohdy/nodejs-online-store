@@ -26,13 +26,13 @@ export async function register(request: Request, response: Response) {
 
   const user = await User.create<UserSchema>(userData);
 
-  return response.success({
-    _records: await User.list(),
-    record: {
-      ...user.only("id", "name", "email"),
-      accessToken,
-    },
-  });
+  // return response.success({
+  //   _records: await User.list(),
+  //   record: {
+  //     ...user.only("id", "name", "email"),
+  //     accessToken,
+  //   },
+  // });
 }
 
 export async function login(request: Request, response: Response) {
