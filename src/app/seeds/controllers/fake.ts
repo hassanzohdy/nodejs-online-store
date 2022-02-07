@@ -6,7 +6,7 @@ import hash from "core/hash";
 import { jwt } from "core/auth";
 import { Random } from "@mongez/reinforcements";
 
-export default async function fake(request: Request, response: Response) {
+export default async function userSeeder(request: Request, response: Response) {
   const data: any[] = [];
 
   let total: number = 0;
