@@ -45,6 +45,9 @@ export async function login(request: Request, response: Response) {
     name: "Hasan",
   });
 
+  log(newRequest.input("password"));
+  log(request.input("password"));
+
   await register(newRequest, response);
 
   log(await User.list());
