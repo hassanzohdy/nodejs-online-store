@@ -6,6 +6,7 @@ import { RequestMethod } from "../router";
 import { Obj } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { DynamicObject } from "utils/types";
+import { log } from "../log";
 
 export class Request implements AppRequest {
   /**
@@ -29,7 +30,7 @@ export class Request implements AppRequest {
     this.setDataList(
       request.params,
       request.query,
-      request.params,
+      request.body,
       request.files
     );
   }
