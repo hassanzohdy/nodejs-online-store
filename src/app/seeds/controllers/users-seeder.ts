@@ -5,6 +5,7 @@ import User from "../../models/User";
 import hash from "core/hash";
 import { jwt } from "core/auth";
 import { Random } from "@mongez/reinforcements";
+import { log } from "core/log";
 
 export default async function userSeeder(request: Request, response: Response) {
   const data: any[] = [];
@@ -12,19 +13,22 @@ export default async function userSeeder(request: Request, response: Response) {
   let total: number = 0;
 
   for (let i = 0; i < 200000; i++) {
-    const email = faker.internet.email;
+    log(`Creating ${i + 1} Record...`);
+    const email = faker.internet.email();
     if (
       await User.first({
         email,
       })
-    )
+    ) {
+      console.log(email);
       continue;
+    }
 
     data.push(
       await User.create({
-        name: faker.internet.userName,
+        name: faker.internet.userName(),
         email: email,
-        password: hash.make(faker.internet.password),
+        password: hash.make(faker.internet.password()),
         accessTokens: [
           jwt.generate({
             key: Random.string(96),

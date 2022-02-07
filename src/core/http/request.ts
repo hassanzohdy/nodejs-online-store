@@ -158,10 +158,10 @@ export class Request implements AppRequest {
     files: any,
     allData?: any
   ) {
-    this.paramsList = Obj.clone(params);
-    this.bodyList = Obj.clone(body);
-    this.queryList = Obj.clone(query);
-    this.filesList = Obj.clone(files);
+    this.paramsList = Obj.clone(params || {});
+    this.bodyList = Obj.clone(body || {});
+    this.queryList = Obj.clone(query || {});
+    this.filesList = Obj.clone(files || []);
     this.allData =
       allData ||
       Obj.merge(this.paramsList, this.queryList, this.bodyList, this.filesList);
