@@ -5,21 +5,22 @@ import { DatabaseConfigurations } from "core/db/types";
 import { ApplicationConfigurations } from "core/application";
 import { setEncryptionConfigurations } from "@mongez/encryption";
 import User from "app/models/User";
+import { env } from "core/dot-env";
 
-const secretKey: string = "mySecret";
+const secretKey: string = env("APP_SECRET_KEY");
 
 export const applicationConfigurations: ApplicationConfigurations = {
-  port: 8000,
-  baseUrl: "http://localhost",
-  appPath: "/store",
-  locale: "en",
+  port: env("APP_PORT"),
+  baseUrl: env("APP_BASE_URL"),
+  appPath: env("APP_BASE_PATH"),
+  locale: env("APP_DEFAULT_LOCALE_CODE"),
   date: {
     format: "dd-MM-y",
   },
 };
 
 export const routerConfigurations: RouterConfigurations = {
-  prefix: "/api",
+  prefix: env("ROUTER_PREFIX"),
 };
 
 setEncryptionConfigurations({
@@ -28,17 +29,17 @@ setEncryptionConfigurations({
 });
 
 export const databaseConfigurations: DatabaseConfigurations = {
-  databaseName: "onlineStore",
-  username: "root",
-  password: "HASAN_2022",
+  port: env("DB_PORT"),
+  server: env("DB_HOST"),
+  databaseName: env("DB_NAME"),
+  username: env("DB_USERNAME"),
+  // password: "HASAN_2022",
   // password: "BaseRoot",
-  port: 27017,
-  server: "127.0.0.1",
+  password: env("DB_PASSWORD"),
 };
 
 export const authConfigurations: AuthConfigurations = {
   secretKey: secretKey,
   guard: User,
-  apiKey:
-    "AF2EWQDRGFTY5432WEDFGRTY5R432QWASDFGRT5R432QWSDFGTYR5432WEQSDFEGRT54",
+  apiKey: env("APP_API_KEY"),
 };

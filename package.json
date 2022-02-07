@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "link-module-alias",
-    "start": "nodemon src/index.ts"
+    "start": "nodemon src/index.ts --app"
   },
   "_moduleAliases": {
     "src": "./src",
@@ -18,6 +18,7 @@
     "@mongez/concat-route": "^1.0.0",
     "@mongez/encryption": "^1.0.4",
     "@mongez/events": "^1.0.9",
+    "@mongez/fs": "1.0.3",
     "@mongez/reinforcements": "^1.0.21",
     "@mongez/supportive-is": "^1.0.4",
     "@mongez/validator": "^1.0.11",
