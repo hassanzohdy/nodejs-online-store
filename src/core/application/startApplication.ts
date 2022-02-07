@@ -1,12 +1,11 @@
-import express, { NextFunction } from "express";
-import { applicationConfigurations, databaseConfigurations } from "config";
+import express from "express";
 import { log } from "../log";
 import chalk from "chalk";
 import multer from "multer";
 import router from "../router";
 import database from "../db";
-import auth from "../auth/middleware/auth";
 import middlewareList from "../router/middleware";
+import { applicationConfigurations, databaseConfigurations } from "config";
 
 export default function startApplication() {
   const app = express();
