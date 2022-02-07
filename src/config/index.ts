@@ -9,7 +9,7 @@ import User from "app/models/User";
 const secretKey: string = "mySecret";
 
 export const applicationConfigurations: ApplicationConfigurations = {
-  port: 3000,
+  port: 8000,
   baseUrl: "http://localhost",
   appPath: "/store",
   locale: "en",

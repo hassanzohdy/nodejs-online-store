@@ -4,7 +4,7 @@ import { RequestMiddleware } from "./types";
 let storedMiddleware: RequestMiddleware[] = [];
 
 const middlewareList = {
-  add(middleware: RequestMiddleware | RequestMiddleware[]): void {
+  add(middleware: RequestMiddleware | RequestMiddleware[] | any): void {
     if (Is.array(middleware)) {
       storedMiddleware = [...storedMiddleware, ...middleware];
     } else {

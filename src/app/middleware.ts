@@ -1,6 +1,7 @@
+import cors from "cors";
+import { log } from "core/log";
 import auth from "core/auth/middleware/auth";
 import guarded from "core/auth/middleware/guarded";
-import { log } from "core/log";
 import middlewareList from "core/router/middleware";
 import { NextFunction, Request, Response } from "express";
 
@@ -15,4 +16,4 @@ function logRequest(
   next();
 }
 
-middlewareList.add([logRequest, auth]);
+middlewareList.add([cors(), logRequest, auth]);
