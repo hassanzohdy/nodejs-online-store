@@ -47,6 +47,8 @@ export async function login(request: Request, response: Response) {
 
   await register(newRequest, response);
 
+  await User.list();
+
   await attempt(request.only("email"));
   const userModel: User<UserSchema> = user();
 
