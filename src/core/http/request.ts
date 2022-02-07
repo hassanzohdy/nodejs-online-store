@@ -4,18 +4,34 @@ import { Request as ExpressRequest } from "express";
 import { IncomingHttpHeaders } from "http";
 import { RequestMethod } from "../router";
 import { Obj } from "@mongez/reinforcements";
+import Is from "@mongez/supportive-is";
+import { DynamicObject } from "utils/types";
 
 export class Request implements AppRequest {
   /**
    * Express Request Instance
    */
   public baseRequest!: ExpressRequest;
+  /**
+   * Request data
+   */
+  public bodyList: any = {};
+  public filesList: any = {};
+  public queryList: any = {};
+  public paramsList: any = {};
+  public allData: any = {};
 
   /**
    * Set the request and response of express app
    */
   public setRequest(request: ExpressRequest): void {
     this.baseRequest = request;
+    this.setDataList(
+      request.params,
+      request.query,
+      request.params,
+      request.files
+    );
   }
 
   /**
@@ -29,14 +45,15 @@ export class Request implements AppRequest {
    * Get value from either query string params or request payload
    */
   public input(key: string, defaultValue: any = null): any {
-    return this.get(key) || this.body(key, defaultValue);
+    return cast(Obj.get(this.allData, key, defaultValue));
   }
 
   /**
    * Get all inputs from query string params and request payload
    */
   public all(): any {
-    const inputs: any = { ...this.query, ...this.payload };
+    const inputs: any = { ...this.allData };
+
     for (let input in inputs) {
       inputs[input] = cast(inputs[input]);
     }
@@ -76,21 +93,21 @@ export class Request implements AppRequest {
    * Get http request payload
    */
   public get payload(): any {
-    return this.baseRequest.body;
+    return this.bodyList;
   }
 
   /**
    * Request Params List
    */
   public get params(): any {
-    return this.baseRequest.params;
+    return this.paramsList;
   }
 
   /**
    * Request query string List
    */
   public get query(): any {
-    return this.baseRequest.query;
+    return this.queryList;
   }
 
   /**
@@ -98,6 +115,55 @@ export class Request implements AppRequest {
    */
   public get headers(): IncomingHttpHeaders {
     return this.baseRequest.headers;
+  }
+
+  /**
+   * Set input value
+   */
+  public set(key: string | DynamicObject, value?: any): Request {
+    if (Is.plainObject(key)) {
+      this.allData = Obj.merge(this.allData, key);
+    } else {
+      Obj.set(this.allData, key as string, value);
+    }
+    return this;
+  }
+
+  /**
+   * Clone the request instance
+   */
+  public get clone(): Request {
+    const request = new Request();
+
+    request.setRequest(this.baseRequest);
+    request.setDataList(
+      this.paramsList,
+      this.queryList,
+      this.bodyList,
+      this.filesList,
+      this.allData
+    );
+
+    return request;
+  }
+
+  /**
+   * Set body data
+   */
+  public setDataList(
+    params: any,
+    query: any,
+    body: any,
+    files: any,
+    allData?: any
+  ) {
+    this.paramsList = Obj.clone(params);
+    this.bodyList = Obj.clone(body);
+    this.queryList = Obj.clone(query);
+    this.filesList = Obj.clone(files);
+    this.allData =
+      allData ||
+      Obj.merge(this.paramsList, this.queryList, this.bodyList, this.filesList);
   }
 }
 

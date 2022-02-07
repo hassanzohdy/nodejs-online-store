@@ -36,10 +36,19 @@ export async function register(request: Request, response: Response) {
 }
 
 export async function login(request: Request, response: Response) {
+  await User.truncate();
+
+  const newRequest = request.clone;
+
+  newRequest.set({
+    ...request.all(),
+    name: "Hasan",
+  });
+
+  await register(newRequest, response);
+
   await attempt(request.only("email"));
   const userModel: User<UserSchema> = user();
-
-  console.log(request.input("password"));
 
   if (
     !userModel ||
