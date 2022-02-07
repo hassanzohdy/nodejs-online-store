@@ -234,6 +234,13 @@ abstract class BaseModel<Schema> {
   }
 
   /**
+   * Count total records
+   */
+  public static async count(): Promise<number> {
+    return await this.query.query.find().count();
+  }
+
+  /**
    * Delete one or more record
    */
   public static async delete(id: number | undefined): Promise<any> {

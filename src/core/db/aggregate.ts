@@ -378,6 +378,22 @@ export default class Aggregate implements AggregateInterface {
   }
 
   /**
+   * Count documents
+   */
+  public async count(): Promise<number> {
+    const results: any = await this.query
+      .aggregate([
+        ...this.parse(),
+        {
+          $count: "total",
+        },
+      ])
+      .next();
+
+    return results.total;
+  }
+
+  /**
    * Perform updates based on the pipelines
    */
   public async update(
