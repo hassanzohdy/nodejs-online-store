@@ -22,9 +22,9 @@ export async function register(request: Request, response: Response) {
 
   userData.password = hash.make(userData.password);
 
-  const accessToken = jwt.generate(userData);
+  const accessToken = await AccessToken.generate();
 
-  userData.accessTokens = [await AccessToken.generate()];
+  userData.accessTokens = [accessToken];
 
   const user = await User.create<UserSchema>(userData);
 
@@ -32,7 +32,7 @@ export async function register(request: Request, response: Response) {
     _records: await User.list(),
     record: {
       ...user.only("id", "name", "email"),
-      accessToken,
+      accessToken: accessToken.token,
     },
   });
 }
@@ -71,7 +71,7 @@ export async function login(request: Request, response: Response) {
   return response.success({
     record: {
       ...userModel.only("id", "name", "email"),
-      accessToken,
+      accessToken: accessToken.token,
     },
   });
 }
