@@ -1,9 +1,9 @@
 import migrateInformationSchema from "core/db/migrations/migrateInformationSchema";
-import migrateAccessToken from "./models/AccessToken/migration";
+import migrateAccessToken from "./users/models/AccessToken/migration";
 import {
   migrateUniqueUsersEmailAndId,
   migrateUserAccessTokens,
-} from "./models/User/migration";
+} from "app/users/models/User/migration";
 
 export async function migrateAll() {
   await migrateInformationSchema();

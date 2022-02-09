@@ -112,6 +112,13 @@ export class Request implements AppRequest {
   }
 
   /**
+   * Get request header
+   */
+  public header(header: string, defaultValue?: any): any {
+    return this.headers[header] ?? defaultValue;
+  }
+
+  /**
    * Get http request header
    */
   public get headers(): IncomingHttpHeaders {
@@ -127,6 +134,7 @@ export class Request implements AppRequest {
     } else {
       Obj.set(this.allData, key as string, value);
     }
+
     return this;
   }
 
@@ -165,6 +173,35 @@ export class Request implements AppRequest {
     this.allData =
       allData ||
       Obj.merge(this.paramsList, this.queryList, this.bodyList, this.filesList);
+  }
+
+  /**
+   * Get request ip
+   */
+  public get ip(): string {
+    return this.baseRequest.ip;
+  }
+
+  /**
+   * Get user agent
+   */
+  public get userAgent(): string {
+    return this.header("user-agent");
+  }
+
+  /**
+   * Get Authorization header type value
+   */
+  public authorization(type: "Bearer" | "Key"): string | null {
+    const authorization = this.header("authorization");
+
+    if (!authorization) return null;
+
+    const [authType, authValue] = authorization.split(" ");
+
+    return authType.toLocaleLowerCase() === type.toLocaleLowerCase()
+      ? authValue
+      : null;
   }
 }
 

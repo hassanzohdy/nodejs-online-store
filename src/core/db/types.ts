@@ -181,9 +181,19 @@ export interface AggregateInterface {
   orderBy(columns: OrderBySchema): AggregateInterface;
 
   /**
+   * Order by latest documents
+   */
+  latest(): AggregateInterface;
+
+  /**
    * List all records
    */
   list<T>(selectColumns?: DatabaseSelect): Promise<Collection<T | any>>;
+
+  /**
+   * Order by latest documents and retrieve it
+   */
+  latestList<T>(columns?: DatabaseSelect): Promise<Collection<T>>;
 
   /**
    * Paginate data
@@ -235,6 +245,7 @@ export type PaginationData = {
     page: number;
     size: number;
     lastPage: number;
+    resultsSize: number;
   };
 };
 

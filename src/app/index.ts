@@ -1,5 +1,5 @@
 import "./middleware";
 import "./home";
-import "./customers";
+import "./users";
 import "./products";
 import "./seeds";

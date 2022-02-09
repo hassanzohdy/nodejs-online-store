@@ -164,4 +164,142 @@ export default class ModelAttributes<Schema> {
     const alteredAttributes = Obj.only(this.attributes, attributes as any);
     return this.castAttributes(alteredAttributes) as T;
   }
+
+  /**
+   * Associate the given data to the given column as embedded document of array of inner documents
+   */
+  public associate(
+    column: string,
+    document: any,
+    sharedDataMethod: string = "sharedData"
+  ): ModelAttributes<Schema> {
+    let documents: any = this.getAttribute(column);
+
+    if (!Is.empty(documents) && !Is.array(documents)) return this;
+
+    if (!documents) {
+      documents = [];
+    }
+
+    let documentData = null;
+
+    if (document[sharedDataMethod]) {
+      documentData = document[sharedDataMethod];
+    } else {
+      documentData = document;
+    }
+
+    documents.push(documentData);
+
+    this.setAttribute(column, documents);
+
+    return this;
+  }
+
+  /**
+   * Reassociate the given data as inner document in the given column
+   */
+  public reassociate(
+    column: string,
+    updatingDocument: any,
+    sharedDataMethod: string = "sharedData",
+    innerDocumentColumn: string = "id"
+  ): ModelAttributes<Schema> {
+    let documents: any = this.getAttribute(column);
+
+    if (!Is.empty(documents) && !Is.array(documents)) return this;
+
+    let updatedDocumentIndex: number = -1;
+
+    const storedDocumentData =
+      updatingDocument[sharedDataMethod] || updatingDocument;
+
+    for (let i = 0; i < documents.length; i++) {
+      const document = documents[i];
+      if (
+        Obj.get(document, innerDocumentColumn) ===
+        Obj.get(updatingDocument, innerDocumentColumn)
+      ) {
+        documents[i] = storedDocumentData;
+        updatedDocumentIndex = i;
+      }
+    }
+
+    if (updatedDocumentIndex === -1) {
+      documents.push(storedDocumentData);
+    }
+
+    this.setAttribute(column, documents);
+
+    return this;
+  }
+
+  /**
+   * Pull from the given column the given value
+   */
+  public pullFrom(
+    column: string,
+    value: any,
+    subDocumentColumn: string = "id"
+  ): ModelAttributes<Schema> {
+    const documents = this.getAttribute(column);
+
+    if (!documents || Is.empty(documents) || !Is.array(documents)) return this;
+
+    const newDocuments = [];
+
+    for (let i = 0; i < documents.length; i++) {
+      const document = documents[i];
+      if (document === value) continue;
+
+      const subDocumentColumnValue = Obj.get(document, subDocumentColumn);
+      if (subDocumentColumnValue === value) continue;
+
+      newDocuments.push(document);
+    }
+
+    return this;
+  }
+
+  /**
+   * @alias pullFrom
+   */
+  public disassociate(
+    column: string,
+    value: any,
+    subDocumentColumn: string = "id"
+  ): ModelAttributes<Schema> {
+    return this.pullFrom(column, value, subDocumentColumn);
+  }
+
+  /**
+   * Get the data for th given columns and unset the columns from the model
+   */
+  public pull(...attributes: string[]): any {
+    const values = this.only(...attributes);
+    this.unset(...attributes);
+
+    return this;
+  }
+
+  /**
+   * Unset the given columns from data
+   */
+  public removeAttributes(...attributes: string[]): void {
+    let finalAttributes: DynamicObject = {};
+    for (let attribute in this.attributes) {
+      if (attributes.includes(attribute)) continue;
+
+      finalAttributes[attribute] = this.attributes[attribute];
+    }
+
+    this.attributes = finalAttributes;
+  }
+
+  /**
+   * @alias removeAttributes
+   */
+  public unset(...attributes: string[]): void {
+    this.removeAttributes(...attributes);
+  }
 }

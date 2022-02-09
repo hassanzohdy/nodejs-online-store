@@ -4,13 +4,13 @@ import { ModelInterface } from "core/db/model";
 import { Response } from "core/http/response";
 import { Request } from "core/http/types/request";
 import { log } from "core/log";
-import User, { UserSchema } from "../../models/User";
+import User, { UserSchema } from "app/users/models/User";
 
 export default async function HomeController(
   request: Request,
   response: Response
 ) {
   response.send({
-    records: await User.count(),
+    records: await User._.list(),
   });
 }

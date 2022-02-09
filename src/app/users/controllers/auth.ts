@@ -2,12 +2,12 @@ import request, { Request } from "core/http/request";
 import { Response } from "core/http/response";
 import { validate } from "@mongez/validator";
 import Is from "@mongez/supportive-is";
-import User, { UserSchema } from "../../models/User";
+import User, { UserSchema } from "../models/User";
 import hash from "core/hash";
 import { jwt } from "core/auth";
-import { attempt, user } from "core/auth/guard";
+import { attempt, authLogout, user } from "core/auth/guard";
 import { Random } from "@mongez/reinforcements";
-import { log } from "core/log";
+import AccessToken from "../models/AccessToken";
 
 export async function register(request: Request, response: Response) {
   const userData = request.only("email", "name", "password");
@@ -22,7 +22,7 @@ export async function register(request: Request, response: Response) {
 
   const accessToken = jwt.generate(userData);
 
-  userData.accessTokens = [accessToken];
+  userData.accessTokens = [await AccessToken.generate()];
 
   const user = await User.create<UserSchema>(userData);
 
@@ -37,7 +37,7 @@ export async function register(request: Request, response: Response) {
 
 export async function login(request: Request, response: Response) {
   await attempt(request.only("email"));
-  const userModel: User<UserSchema> = user();
+  const userModel = user<User<UserSchema>>();
 
   if (
     !userModel ||
@@ -48,9 +48,7 @@ export async function login(request: Request, response: Response) {
     });
   }
 
-  const accessToken = jwt.generate({
-    key: Random.string(96),
-  });
+  const accessToken = await AccessToken.generate();
 
   userModel.accessTokens.push(accessToken);
 
@@ -64,55 +62,20 @@ export async function login(request: Request, response: Response) {
   });
 }
 
-class Validator {
-  public inputs: any = {};
-  public rulesMapping: any = {
-    required: {
-      required: true,
-    },
-    email: {
-      type: "email",
-    },
-  };
+register.validate = (request: Request, response: Response) => {};
 
-  rules(rules: any): Validator {
-    for (let input in rules) {
-      let value = request.input(input);
-      const inputRules = rules[input];
-      this.inputs[input] = {
-        value,
-        rules: inputRules,
-      };
-    }
+export async function logout(request: Request, response: Response) {
+  const currentUser: any = user();
 
-    return this;
-  }
+  if (!currentUser) return;
 
-  scan() {
-    for (let input in this.inputs) {
-      const inputOptions = this.inputs[input];
-      const convertedProps = this.mapRules(inputOptions.rules);
-      const validator = validate(inputOptions.value, {}, []);
-    }
-  }
+  await (
+    await currentUser.logout(request.authorization("Bearer") as string)
+  ).save();
 
-  public mapRules(rules: any): any {
-    if (Is.string(rules)) {
-      rules = rules.split("|");
-    }
+  authLogout();
 
-    let props = {};
-
-    if (Is.array(rules)) {
-    }
-  }
+  return response.success({
+    success: true,
+  });
 }
-
-register.validate = (
-  validator: Validator,
-  request: Request,
-  response: Response
-) => {
-  //   const validator = new Validator();
-  validator;
-};

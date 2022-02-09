@@ -1,7 +1,7 @@
 import { Response } from "core/http/response";
 import { Request } from "core/http/types/request";
 import faker from "@faker-js/faker";
-import User from "../../models/User";
+import User from "app/users/models/User";
 import hash from "core/hash";
 import { jwt } from "core/auth";
 import { Random } from "@mongez/reinforcements";

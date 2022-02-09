@@ -311,6 +311,21 @@ export default class Aggregate implements AggregateInterface {
   }
 
   /**
+   * Get only last matched record
+   */
+  public async last<T>(columns?: DatabaseSelect): Promise<T> {
+    columns && this.select(columns);
+
+    return (
+      await this.orderBy({
+        id: "desc",
+      })
+        .limit(1)
+        .list<T>()
+    ).first();
+  }
+
+  /**
    * Get the list of the documents for the processed pipelines
    */
   public async list<T>(columns?: DatabaseSelect): Promise<ArrayCollection<T>> {
@@ -326,6 +341,24 @@ export default class Aggregate implements AggregateInterface {
     }
 
     return collect<T>(records);
+  }
+
+  /**
+   * Order by latest documents
+   */
+  public latest(): AggregateInterface {
+    return this.orderBy({
+      id: "desc",
+    });
+  }
+
+  /**
+   * Order by latest documents and retrieve it
+   */
+  public async latestList<T>(
+    columns?: DatabaseSelect
+  ): Promise<ArrayCollection<T>> {
+    return this.latest().list<T>(columns);
   }
 
   /**
@@ -350,7 +383,7 @@ export default class Aggregate implements AggregateInterface {
         ...this.parse(),
         {
           $facet: {
-            results: [
+            total: [
               {
                 $count: "totalDocuments",
               },
@@ -358,9 +391,9 @@ export default class Aggregate implements AggregateInterface {
           },
         },
       ])
-      .toArray();
+      .next();
 
-    const totalRecords: number = results[0]?.results[0]?.totalDocuments ?? 0;
+    const totalRecords: number = results?.total[0]?.totalDocuments ?? 0;
 
     this.skip(skip).limit(size);
 
@@ -371,7 +404,8 @@ export default class Aggregate implements AggregateInterface {
       info: {
         totalRecords,
         page,
-        size: records.toArray().length,
+        size,
+        resultsSize: records.toArray().length,
         lastPage: Math.ceil(totalRecords / size),
       },
     } as PaginationData;

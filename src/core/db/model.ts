@@ -429,7 +429,7 @@ abstract class BaseModel<Schema> {
   /**
    * Shared data
    */
-  public get sharedData(): Schema {
+  public get sharedData(): DynamicObject {
     return this.data;
   }
 
