@@ -9,19 +9,19 @@ export type AccessTokenSchema = BaseSchema & {
   /**
    * Client ip
    */
-  ip: string;
+  ip?: string;
   /**
    * Client device id
    */
-  deviceId: string;
+  deviceId?: string;
   /**
    * Client user agent
    */
-  userAgent: string;
+  userAgent?: string;
   /**
    * Access token state
    */
-  expired: boolean;
+  expired?: boolean;
   /**
    * Expired at
    */

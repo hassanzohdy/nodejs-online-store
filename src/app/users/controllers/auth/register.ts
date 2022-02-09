@@ -8,18 +8,12 @@ import User, { UserSchema } from "app/users/models/User";
 export default async function register(request: Request, response: Response) {
   const userData = request.only("email", "name", "password");
 
-  userData.password = hash.make(userData.password);
-
-  const accessToken = await AccessToken.generate();
-
-  userData.accessTokens = [accessToken];
-
   const user = await User.create<UserSchema>(userData);
 
   return response.successCreate({
     record: {
-      ...user.only("id", "name", "email"),
-      accessToken: accessToken.token,
+      ...user.toJSON(),
+      accessToken: user.currentToken,
     },
   });
 }

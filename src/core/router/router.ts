@@ -123,17 +123,22 @@ class Router {
           request.setRequest(expressRequest);
           const handler = route.handler as any;
 
+          request.setValidator(null);
+
           if (handler.validate) {
-            let validator = await handler.validate(
-              new Validator(),
+            let validator = new Validator();
+            request.setValidator(validator);
+            let validationOutput = await handler.validate(
+              validator,
               request,
               response
             );
-            if (validator instanceof Validator) {
-              await validator.scan();
-              if (validator.fails) {
+
+            if (validationOutput instanceof Validator) {
+              await validationOutput.scan();
+              if (validationOutput.fails) {
                 return response.badRequest({
-                  errors: validator.errors.list(),
+                  errors: validationOutput.errors.list(),
                 });
               }
             }

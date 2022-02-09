@@ -161,7 +161,10 @@ export default class ModelAttributes<Schema> {
    * Get only the values of the given attributes
    */
   public only<T>(...attributes: (keyof T)[]): T {
-    const alteredAttributes = Obj.only(this.attributes, attributes as any);
+    const alteredAttributes =
+      attributes.length === 0
+        ? this.attributes
+        : Obj.only(this.attributes, attributes as any);
     return this.castAttributes(alteredAttributes) as T;
   }
 

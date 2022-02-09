@@ -172,6 +172,13 @@ export default class Validator {
   }
 
   /**
+   * Get inputs list
+   */
+  public get inputsList(): string[] {
+    return Object.keys(this.inputs);
+  }
+
+  /**
    * Determine if validation has failed
    */
   public get fails(): boolean {

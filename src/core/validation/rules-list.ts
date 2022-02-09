@@ -8,6 +8,7 @@ import ExistsRule from "./rules/exists";
 import RequiredRule from "./rules/required";
 import MaxLengthRule from "./rules/max-length";
 import MinLengthRule from "./rules/min-length";
+import ConfirmedRule from "./rules/confirmed";
 
 export const rulesList = {
   [InRule.rule]: InRule,
@@ -20,4 +21,5 @@ export const rulesList = {
   [RequiredRule.rule]: RequiredRule,
   [MinLengthRule.rule]: MinLengthRule,
   [MaxLengthRule.rule]: MaxLengthRule,
+  [ConfirmedRule.rule]: ConfirmedRule,
 };

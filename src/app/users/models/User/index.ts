@@ -1,14 +1,17 @@
+import hash from "core/hash";
 import database from "core/db";
-import BasModel, { ModelInterface } from "core/db/model";
-import { BaseSchema } from "core/db/types";
 import AccessToken from "../AccessToken";
+import { BaseSchema } from "core/db/types";
+import { Obj } from "@mongez/reinforcements";
+import BasModel, { ModelInterface } from "core/db/model";
+import { AccessTokenSchema } from "../AccessToken/schema";
 
 export type UserSchema = BaseSchema & {
   name: string;
   email: string;
   password: string;
   isActive?: boolean;
-  accessTokens?: string[];
+  accessTokens?: AccessTokenSchema[];
 };
 
 export default class User<UserSchema>
@@ -19,11 +22,50 @@ export default class User<UserSchema>
    * {@inheritDoc}
    */
   public static collection: string = "users";
+
   /**
    * {@inheritDoc}
    */
   public get sharedData(): any {
-    return this.only("id", "email", "name", "isActive");
+    return this.only("id", "email", "name");
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public toJSON(): any {
+    return this.sharedData;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public static async create<T>(data: T | any): Promise<any> {
+    data.accessTokens = [await AccessToken.generate()];
+
+    data.password = hash.make(data.password);
+
+    return super.create(data);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  public async save(attributes?: any): Promise<any> {
+    if (attributes?.password) {
+      attributes.password = hash.make(attributes.password);
+    }
+
+    return super.save(attributes);
+  }
+
+  /**
+   * Get current user access token
+   */
+  public get currentToken(): string {
+    const accessTokens = this.getAttribute("accessTokens", []);
+
+    return Obj.get(accessTokens, `${accessTokens.length - 1}.token`);
   }
 
   /**

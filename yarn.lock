@@ -31,7 +31,7 @@
   dependencies:
     crypto-js "^4.0.0"
 
-"@mongez/events@1.0.x", "@mongez/events@^1.0.9", "@mongez/events@^1.0.x":
+"@mongez/events@^1.0.9":
   version "1.0.9"
   resolved "https://registry.yarnpkg.com/@mongez/events/-/events-1.0.9.tgz#8d9c3d3830c5973740b76869ac3a08d64a7fbdbc"
   integrity sha512-6vJaOeG6RE2Tzv9MsWVfBAqr5K/qESpymhlTPca5qs0bX4MGhHxAcBthhqByf6MJlAXwTGbBzoe9kmE6wGp3VA==
@@ -43,41 +43,18 @@
   dependencies:
     fs-extra "^10.0.0"
 
-"@mongez/localization@^1.0.x":
-  version "1.0.14"
-  resolved "https://registry.yarnpkg.com/@mongez/localization/-/localization-1.0.14.tgz#a4acfd9e9f80b88a94ad57d0dd42a6d7c2d3c0f9"
-  integrity sha512-tBCpMJWG4U3Bg6s+ctVwQNSg3OQBpTwzazBiO6+MkIBMWbOORFhBSltOA0APGykRoI6WbZo4knCuFw9v8jD2UA==
-  dependencies:
-    "@mongez/events" "1.0.x"
-    "@mongez/reinforcements" "1.0.x"
-
-"@mongez/reinforcements@1.0.x", "@mongez/reinforcements@^1.0.21", "@mongez/reinforcements@^1.0.x":
-  version "1.0.21"
-  resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.21.tgz#8aa58d2a5eb50d4d4015924ccf9725f666debe21"
-  integrity sha512-YC8DSVrn1vn7BhQiD+6awsz9I9EjQ0KpHQC9wVK4b3bk6oK8u/gv/VfPYAtjsPh8QUp7im6Cc0iDJRRDGDoxyg==
+"@mongez/reinforcements@^1.0.22":
+  version "1.0.22"
+  resolved "https://registry.yarnpkg.com/@mongez/reinforcements/-/reinforcements-1.0.22.tgz#99ae2d909f6cde3dea719860c3b316ed41a30fc1"
+  integrity sha512-cjrs3O26PvY1AdRYetN5HhRH2fLtfT9ekayx9pAQ6ugjBvF800rtP4kj7Tk7MRtu88X3/I6PBqrD5hNYHgF23Q==
   dependencies:
     immutable "^4.0.0"
     sprintf-js "^1.1.2"
 
-"@mongez/supportive-is@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@mongez/supportive-is/-/supportive-is-1.0.4.tgz#2414be9253309ff391f8fe2e58ba12d24cab8399"
-  integrity sha512-SF5SDiEf3xzP9ALemyfkXzyjy5FQm+UyiN4QnbPprv2ZhPcJUdWyIJWds8Oom2ZDIKJlEkcjDmcob5Ku/mHcig==
-
-"@mongez/supportive-is@^1.0.x":
+"@mongez/supportive-is@^1.0.5":
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/@mongez/supportive-is/-/supportive-is-1.0.5.tgz#f363bbab6510a00d8c3c29111b3ed1735547e827"
   integrity sha512-kp5hbnpBb9iYmxrkAbMJONv/x5TaDdKSdkMDH+rZVb7RSICfWiVLiInWidqG3NggCytNKYzWMhe8kq7JGhNSQQ==
-
-"@mongez/validator@^1.0.11":
-  version "1.0.11"
-  resolved "https://registry.yarnpkg.com/@mongez/validator/-/validator-1.0.11.tgz#9c3cbcd4db526fc6dd25b8f6fb1da624c643fc9b"
-  integrity sha512-+MUHNJm3A3dqVtOH/BcdMgWb0nfDH6B2KPTCZoZdM5/iAXKLoIbJciM7a0MD9Jd97F6bGsdb1xHfyyb6WL24zg==
-  dependencies:
-    "@mongez/events" "^1.0.x"
-    "@mongez/localization" "^1.0.x"
-    "@mongez/reinforcements" "^1.0.x"
-    "@mongez/supportive-is" "^1.0.x"
 
 "@poppinss/traits@^1.0.1":
   version "1.0.1"
@@ -189,10 +166,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.8.tgz#50d680c8a8a78fe30abe6906453b21ad8ab0ad7b"
   integrity sha512-YofkM6fGv4gDJq78g4j0mMuGMkZVxZDgtU0JRdx6FgiJDG+0fY0GKVolOV8WqVmEhLCXkQRjwDdKyPxJp/uucg==
 
-"@types/node@^17.0.12":
-  version "17.0.12"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.12.tgz#f7aa331b27f08244888c47b7df126184bc2339c5"
-  integrity sha512-4YpbAsnJXWYK/fpTVFlMIcUIho2AYCi4wg5aNPrG1ng7fn/1/RZfCIpRCiBX+12RVa34RluilnvCqD+g3KiSiA==
+"@types/node@^17.0.16":
+  version "17.0.16"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.16.tgz#e3733f46797b9df9e853ca9f719c8a6f7b84cd26"
+  integrity sha512-ydLaGVfQOQ6hI1xK2A5nVh8bl0OGoIfYMxPWHqqYe9bTkWCfqiVvZoh2I/QF2sNSkZzZyROBoTefIEI+PB6iIA==
 
 "@types/qs@*":
   version "6.9.7"
@@ -1636,10 +1613,10 @@ tr46@^3.0.0:
   dependencies:
     punycode "^2.1.1"
 
-ts-node@^10.4.0:
-  version "10.4.0"
-  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.4.0.tgz#680f88945885f4e6cf450e7f0d6223dd404895f7"
-  integrity sha512-g0FlPvvCXSIO1JDF6S232P5jPYqBkRL9qly81ZgAOSU7rwI0stphCgd2kLiCrU9DjQCrJMWEqcNSjQL02s6d8A==
+ts-node@^10.5.0:
+  version "10.5.0"
+  resolved "https://registry.yarnpkg.com/ts-node/-/ts-node-10.5.0.tgz#618bef5854c1fbbedf5e31465cbb224a1d524ef9"
+  integrity sha512-6kEJKwVxAJ35W4akuiysfKwKmjkbYxwQMTBaAxo9KKAx/Yd26mPUyhGz3ji+EsJoAgrLqVsYHNuuYwQe22lbtw==
   dependencies:
     "@cspotcode/source-map-support" "0.7.0"
     "@tsconfig/node10" "^1.0.7"
@@ -1652,6 +1629,7 @@ ts-node@^10.4.0:
     create-require "^1.1.0"
     diff "^4.0.1"
     make-error "^1.1.1"
+    v8-compile-cache-lib "^3.0.0"
     yn "3.1.1"
 
 type-fest@^0.20.2:
@@ -1742,6 +1720,11 @@ utils-merge@1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/utils-merge/-/utils-merge-1.0.1.tgz#9f95710f50a267947b2ccc124741c1028427e713"
   integrity sha1-n5VxD1CiZ5R7LMwSR0HBAoQn5xM=
+
+v8-compile-cache-lib@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/v8-compile-cache-lib/-/v8-compile-cache-lib-3.0.0.tgz#0582bcb1c74f3a2ee46487ceecf372e46bce53e8"
+  integrity sha512-mpSYqfsFvASnSn5qMiwrr4VKfumbPyONLCOPmsR3A6pTY/r0+tSaVbgPWSAIuzbk3lCTa+FForeTiO+wBQGkjA==
 
 vary@^1, vary@~1.1.2:
   version "1.1.2"

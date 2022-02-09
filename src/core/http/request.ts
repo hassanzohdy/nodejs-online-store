@@ -7,6 +7,7 @@ import { Obj } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { DynamicObject } from "utils/types";
 import { log } from "../log";
+import Validator from "../validation";
 
 export class Request implements AppRequest {
   /**
@@ -21,6 +22,42 @@ export class Request implements AppRequest {
   public queryList: any = {};
   public paramsList: any = {};
   public allData: any = {};
+
+  /**
+   * Request validator
+   */
+  private validator: Validator | null = null;
+
+  /**
+   * Set Request validator
+   */
+  public setValidator(validator: Validator | null): Request {
+    this.validator = validator;
+    return this;
+  }
+
+  /**
+   * Get validated inputs
+   */
+  public get validated() {
+    if (!this.validator) {
+      this.validator = new Validator();
+    }
+
+    let inputs = this.only(...this.validator.inputsList);
+
+    return {
+      get all() {
+        return inputs;
+      },
+      only(...onlyInputs: string[]) {
+        return Obj.only(inputs, onlyInputs);
+      },
+      except(...exceptInputs: string[]) {
+        return Obj.except(inputs, exceptInputs);
+      },
+    };
+  }
 
   /**
    * Set the request and response of express app
@@ -73,15 +110,7 @@ export class Request implements AppRequest {
    * Get all data except the given inputs
    */
   public except(...keys: string[]): any {
-    const data = { ...this.all() };
-
-    for (let key in data) {
-      if (keys.includes(key)) {
-        delete data[key];
-      }
-    }
-
-    return data;
+    return Obj.except(this.all(), keys);
   }
 
   /**

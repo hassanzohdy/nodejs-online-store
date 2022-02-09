@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import cast from "utils/cast";
 import database from "../../db";
 import Rule from "./rule";
 
@@ -37,7 +38,7 @@ export default class ExistsRule extends Rule {
       .aggregate.where(searchingColumn, this.value);
 
     if (ignoringValue) {
-      query.where(ignoringColumn, "!=", ignoringValue);
+      query.where(ignoringColumn, "!=", cast(ignoringValue));
     }
 
     const document = await query.first();

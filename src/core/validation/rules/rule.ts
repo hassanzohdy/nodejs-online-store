@@ -93,11 +93,28 @@ export default class Rule {
   /**
    * Get error message
    */
-  public message(message: string): string {
-    return (this.newMessage || message)
-      .replace(":input", this.inputName || this.input)
-      .replace(":options", this.options.join("|"))
-      .replace(":options[0]", this.options[0]);
+  public message(message: string, replacements: any = {}): string {
+    replacements = this.mergeWithDefaultReplacements(replacements);
+    let finalMessage: string = this.newMessage || message;
+    for (let searchingKey in replacements) {
+      finalMessage = finalMessage.replace(
+        ":" + searchingKey,
+        replacements[searchingKey]
+      );
+    }
+    return finalMessage;
+  }
+
+  /**
+   * Merge the given replacements with the default replacements list
+   */
+  protected mergeWithDefaultReplacements(replacements: any): any {
+    return {
+      input: this.inputName || this.input,
+      "options[0]": this.options[0],
+      options: this.options.join("|"),
+      ...replacements,
+    };
   }
 
   /**
