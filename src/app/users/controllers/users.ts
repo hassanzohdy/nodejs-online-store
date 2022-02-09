@@ -55,7 +55,7 @@ export async function deleteUser(request: Request, response: Response) {
     });
   }
 
-  await user.delete();
+  await user.destroy();
 
   return response.success({
     success: true,

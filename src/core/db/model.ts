@@ -182,12 +182,14 @@ abstract class BaseModel<Schema> {
   /**
    * Delete current model record
    */
-  public async delete(): Promise<any> {
+  public async destroy(): Promise<any> {
     if (!this.id) return null;
 
     BaseModel.trigger(this.collection, "deleting", this);
 
-    let result = await BaseModel.delete(this.id);
+    let result = await this.query.delete({
+      id: this.id,
+    });
 
     BaseModel.trigger(this.collection, "delete", this, result);
 
@@ -284,7 +286,7 @@ abstract class BaseModel<Schema> {
    * Get collection name
    */
   public get collection(): string {
-    return this.const("collection");
+    return this.call("collection");
   }
 
   /**
@@ -421,7 +423,7 @@ abstract class BaseModel<Schema> {
   /**
    * Get a static property/method from non static method
    */
-  public const(property: string): any {
+  public call(property: string): any {
     const base: any = <typeof BaseModel>this.constructor;
     return base[property];
   }
