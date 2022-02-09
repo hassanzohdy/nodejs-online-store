@@ -154,7 +154,7 @@ export interface AggregateInterface {
     column: Column | any,
     operator: DatabaseOperator,
     value: Value,
-    type: LogicalOperator
+    type?: LogicalOperator
   ): AggregateInterface;
 
   /**

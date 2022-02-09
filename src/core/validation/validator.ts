@@ -6,6 +6,7 @@ import { InputError, RuleError } from "./types";
 import { DynamicObject } from "utils/types";
 import { rulesList } from "./rules-list";
 import cast from "utils/cast";
+import chalk from "chalk";
 
 export default class Validator {
   /**
@@ -29,6 +30,11 @@ export default class Validator {
   private errorMessages: any = {};
 
   /**
+   * Determine whether the validator has run the scan
+   */
+  public isScanned: boolean = false;
+
+  /**
    * Input names replacements in the error messages
    */
   private inputNamesReplacements: DynamicObject = {};
@@ -42,9 +48,17 @@ export default class Validator {
   }
 
   /**
+   * Set error messages to override default errors
+   */
+  public messages(errorMessages: any): Validator {
+    this.errorMessages = errorMessages;
+    return this;
+  }
+
+  /**
    * Set input names replacements
    */
-  public setInputNames(inputNames: DynamicObject): Validator {
+  public attributes(inputNames: DynamicObject): Validator {
     this.inputNamesReplacements = inputNames;
     return this;
   }
@@ -53,25 +67,24 @@ export default class Validator {
    * Set the rules list
    */
   public rules(rules: any): Validator {
-    for (let input in rules) {
-      this.inputs[input] = {
-        rules: rules[input],
-      };
-    }
-
+    this.inputs = rules;
     return this;
   }
 
   /**
    * Start validating
    */
-  public diagnose(): Validator {
+  public async diagnose(): Promise<Validator> {
+    if (this.isScanned) return this;
+
     this.errorsList = [];
 
     for (let input in this.inputs) {
       let rules: any = this.inputs[input];
-      this.validateInput(input, rules);
+      await this.validateInput(input, rules);
     }
+
+    this.isScanned = true;
 
     return this;
   }
@@ -79,53 +92,67 @@ export default class Validator {
   /**
    * @alias diagnose
    */
-  public scan(): Validator {
+  public scan() {
     return this.diagnose();
   }
 
   /**
    * Validate the given input and its rules
    */
-  private validateInput(input: string, rules: any): void {
+  private async validateInput(input: string, rules: any): Promise<void> {
     const inputError: RuleError[] = [];
 
     if (Is.string(rules)) {
       rules = rules.split("|");
     }
 
+    // the bail rule name will tell the validator to stop validating after the first failure of the attributes
+    const validateAllAttributes: boolean = rules.includes("bail");
+
     for (let rule of rules) {
+      if (rule === "bail") continue;
+
       if (Is.string(rule)) {
         rule = rule.split(":");
-        const [ruleName, ...options] = rules;
-
-        if (!new rulesList[ruleName]()) {
-          throw new Error(
-            `Invalid ${ruleName} rule, allowed rules are: ${Object.keys(
-              this.rulesList
-            ).join("|")}`
-          );
-        }
-
-        rule = new this.rulesList[ruleName]();
-
-        // cast the value as it will be coming from string
-        rule.setOptions(options.map(cast));
       }
 
-      rule
+      const [ruleName, ...options] = rule;
+
+      if (!rulesList[ruleName]) {
+        throw new Error(
+          `Invalid ${chalk.redBright(
+            ruleName
+          )} rule, allowed rules are: ${chalk.green(
+            Object.keys(this.rulesList).join("|")
+          )}`
+        );
+      }
+
+      rule = new this.rulesList[ruleName]();
+
+      // cast the value as it will be coming from string
+      rule.setOptions(options.map(cast));
+
+      await rule
         .setInput(input)
         .setInputName(this.inputNamesReplacements[input] || input)
         .setValue(request.input(input))
         .validate();
 
-      if (rule.isValid === false) {
+      if (rule.fails) {
+        let messageOverrides =
+          this.errorMessages[`${input}.${rule.name}`] ||
+          this.errorMessages[rule.name];
+        if (messageOverrides) {
+          rule.overrideMessage(messageOverrides);
+        }
+
         inputError.push({
           rule: rule.name,
-          message:
-            this.errorMessages[`${input}.${rule.name}`] ||
-            this.errorMessages[rule.name] ||
-            rule.errorMessage,
+          message: rule.errorMessage,
         });
+
+        if (validateAllAttributes === false) break;
       }
     }
 
@@ -140,14 +167,14 @@ export default class Validator {
   /**
    * Check if the validation passes
    */
-  public passes(): boolean {
+  public get passes(): boolean {
     return this.errorsList.length === 0;
   }
 
   /**
    * Determine if validation has failed
    */
-  public fails(): boolean {
+  public get fails(): boolean {
     return this.errorsList.length > 0;
   }
 

@@ -28,8 +28,6 @@ export default class MinLengthRule extends Rule {
    * {@inheritdoc}
    */
   public get errorMessage(): string {
-    return this.message(
-      `:input must be at least :options[0] characters or more.`
-    );
+    return this.message(`:input must be :options[0] characters or more.`);
   }
 }

@@ -4,8 +4,8 @@ import { RouterConfigurations } from "core/router";
 import { DatabaseConfigurations } from "core/db/types";
 import { ApplicationConfigurations } from "core/application";
 import { setEncryptionConfigurations } from "@mongez/encryption";
-import User from "app/models/User";
 import { env } from "core/dot-env";
+import User from "app/users/models/User";
 
 const secretKey: string = env("APP_SECRET_KEY");
 

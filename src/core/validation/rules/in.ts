@@ -30,6 +30,6 @@ export default class InRule extends Rule {
    * {@inheritdoc}
    */
   public get errorMessage(): string {
-    return this.message(`:input must be at least :options[0].`);
+    return this.message(`:input must be one of the following types: :options`);
   }
 }

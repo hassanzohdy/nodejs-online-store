@@ -17,6 +17,7 @@ import { applicationConfigurations, routerConfigurations } from "config";
 import concatRoute from "@mongez/concat-route";
 import request from "../http/request";
 import response from "../http/response";
+import Validator from "../validation";
 
 class Router {
   /**
@@ -114,9 +115,30 @@ class Router {
     for (let route of this.routesList) {
       const handlers = [
         ...route.middleware!,
-        (expressRequest: ExpressRequest, expressResponse: ExpressResponse) => {
+        async (
+          expressRequest: ExpressRequest,
+          expressResponse: ExpressResponse
+        ) => {
           response.setBaseResponse(expressResponse);
           request.setRequest(expressRequest);
+          const handler = route.handler as any;
+
+          if (handler.validate) {
+            let validator = await handler.validate(
+              new Validator(),
+              request,
+              response
+            );
+            if (validator instanceof Validator) {
+              await validator.scan();
+              if (validator.fails) {
+                return response.badRequest({
+                  errors: validator.errors.list(),
+                });
+              }
+            }
+          }
+
           route.handler(request, response);
         },
       ];

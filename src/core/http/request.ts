@@ -70,6 +70,21 @@ export class Request implements AppRequest {
   }
 
   /**
+   * Get all data except the given inputs
+   */
+  public except(...keys: string[]): any {
+    const data = { ...this.all() };
+
+    for (let key in data) {
+      if (keys.includes(key)) {
+        delete data[key];
+      }
+    }
+
+    return data;
+  }
+
+  /**
    * Get input from query string
    */
   public param(key: string, defaultValue: any = null): any {

@@ -307,7 +307,7 @@ export default class Aggregate implements AggregateInterface {
   public async first<T>(columns?: DatabaseSelect): Promise<T> {
     columns && this.select(columns);
 
-    return (await this.limit(1).list<T>()).first();
+    return (await this.limit(1).list<T>()).first() || null;
   }
 
   /**

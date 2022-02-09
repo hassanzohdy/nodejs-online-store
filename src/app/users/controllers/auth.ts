@@ -8,6 +8,8 @@ import { jwt } from "core/auth";
 import { attempt, authLogout, user } from "core/auth/guard";
 import { Random } from "@mongez/reinforcements";
 import AccessToken from "../models/AccessToken";
+import Validator from "core/validation";
+import { log } from "core/log";
 
 export async function register(request: Request, response: Response) {
   const userData = request.only("email", "name", "password");
@@ -62,7 +64,17 @@ export async function login(request: Request, response: Response) {
   });
 }
 
-register.validate = (request: Request, response: Response) => {};
+register.validate = async (
+  validator: Validator,
+  request: Request,
+  response: Response
+) => {
+  return await validator.rules({
+    email: "required|email|unique:users",
+    name: "required",
+    password: "required",
+  });
+};
 
 export async function logout(request: Request, response: Response) {
   const currentUser: any = user();

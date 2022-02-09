@@ -5,6 +5,7 @@ export default class Rule {
    * Public rule name
    */
   public static rule: string;
+
   /**
    * {@inheritdoc}
    */
@@ -34,6 +35,11 @@ export default class Rule {
    * Rule validation flag
    */
   public isValid: boolean = true;
+
+  /**
+   * The override message from the user
+   */
+  public newMessage: string = "";
 
   /**
    * Rule name
@@ -77,22 +83,38 @@ export default class Rule {
   }
 
   /**
+   * Override the rule error message
+   */
+  public overrideMessage(message: string): Rule {
+    this.newMessage = message;
+    return this;
+  }
+
+  /**
    * Get error message
    */
   public message(message: string): string {
-    return message
+    return (this.newMessage || message)
       .replace(":input", this.inputName || this.input)
+      .replace(":options", this.options.join("|"))
       .replace(":options[0]", this.options[0]);
+  }
+
+  /**
+   * Determine if rule fails
+   */
+  public get fails(): boolean {
+    return this.isValid === false;
   }
 
   /**
    * Start validating the rule
    */
-  public validate(): Rule {
+  public async validate(): Promise<any> {
     this.beforeValidating();
     if (this.requiresValue && Is.empty(this.value)) return this;
 
-    this.validateRule();
+    await this.validateRule();
 
     return this;
   }

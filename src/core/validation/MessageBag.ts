@@ -5,6 +5,7 @@ export default class MessageBag {
    * Error return mode
    */
   private returnMode: "all" | "first" = "first";
+
   /**
    * Construct the message bag and define the errors list
    */
@@ -21,7 +22,7 @@ export default class MessageBag {
   /**
    * A flag to define the error will return all errors
    */
-  public get all(): MessageBag {
+  public get returnAll(): MessageBag {
     this.returnMode = "all";
     return this;
   }
@@ -31,9 +32,10 @@ export default class MessageBag {
    */
   public toObject() {
     let errors: any = {};
+
     for (let error of this.errors) {
       errors[error.input] =
-        this.returnMode == "first"
+        this.returnMode === "first"
           ? error.errors[0].message
           : error.errors.map((rule) => rule.message);
     }
@@ -61,9 +63,28 @@ export default class MessageBag {
   }
 
   /**
+   * Return error as defined
+   */
+  public list(): any {
+    return this.toObject();
+  }
+
+  /**
+   * Add a new error
+   */
+  public add(input: string, errors: any): MessageBag {
+    this.errors.push({
+      input,
+      errors,
+    });
+
+    return this;
+  }
+
+  /**
    * Get the entire errors list
    */
-  public errorsList(): InputError[] {
+  public all(): InputError[] {
     return this.errors;
   }
 }
