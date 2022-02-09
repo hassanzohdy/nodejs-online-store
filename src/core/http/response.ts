@@ -29,6 +29,13 @@ export class Response {
   }
 
   /**
+   * Send success create response
+   */
+  public successCreate(data: any): any {
+    return this.send(data, 201);
+  }
+
+  /**
    * Send bad request response
    */
   public badRequest(data: any): void {

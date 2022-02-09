@@ -8,7 +8,7 @@ let currentUser: any = null;
  * Attempt to login to the app using the given data
  * If success, then create an auth user for the current request
  */
-export async function attempt(data: any): Promise<ModelInterface<any>> {
+export async function attempt<T>(data: any): Promise<T | ModelInterface<any>> {
   const BaseModel = authConfigurations.guard!;
 
   authLogout();
