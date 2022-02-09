@@ -6,7 +6,7 @@ export default async function users(request: Request, response: Response) {
   const users = await User._.paginate();
 
   return response.success({
-    records: users.records,
+    records: users.records.map((user) => user.only("id", "name", "email")),
     paginationInfo: users.info,
   });
 }
