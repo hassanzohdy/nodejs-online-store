@@ -37,6 +37,18 @@ export async function register(request: Request, response: Response) {
   });
 }
 
+register.validate = async (
+  validator: Validator,
+  request: Request,
+  response: Response
+) => {
+  return await validator.rules({
+    email: "required|email|unique:users",
+    name: "required",
+    password: "required",
+  });
+};
+
 export async function login(request: Request, response: Response) {
   await attempt(request.only("email"));
   const userModel = user<User<UserSchema>>();
@@ -64,14 +76,9 @@ export async function login(request: Request, response: Response) {
   });
 }
 
-register.validate = async (
-  validator: Validator,
-  request: Request,
-  response: Response
-) => {
-  return await validator.rules({
-    email: "required|email|unique:users",
-    name: "required",
+login.validate = (validator: Validator) => {
+  return validator.rules({
+    email: "required|exists:users",
     password: "required",
   });
 };
