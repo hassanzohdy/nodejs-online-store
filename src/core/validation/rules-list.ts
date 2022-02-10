@@ -9,12 +9,15 @@ import RequiredRule from "./rules/required";
 import MaxLengthRule from "./rules/max-length";
 import MinLengthRule from "./rules/min-length";
 import ConfirmedRule from "./rules/confirmed";
+import ImageRule from "./rules/image";
+import ExtensionRule from "./rules/extension";
 
 export const rulesList = {
   [InRule.rule]: InRule,
   [MinRule.rule]: MinRule,
   [MaxRule.rule]: MaxRule,
   [EmailRule.rule]: EmailRule,
+  [ImageRule.rule]: ImageRule,
   [LengthRule.rule]: LengthRule,
   [UniqueRule.rule]: UniqueRule,
   [ExistsRule.rule]: ExistsRule,
@@ -22,4 +25,5 @@ export const rulesList = {
   [MinLengthRule.rule]: MinLengthRule,
   [MaxLengthRule.rule]: MaxLengthRule,
   [ConfirmedRule.rule]: ConfirmedRule,
+  [ExtensionRule.rule]: ExtensionRule,
 };

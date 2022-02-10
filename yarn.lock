@@ -101,6 +101,13 @@
     "@types/connect" "*"
     "@types/node" "*"
 
+"@types/busboy@^0":
+  version "0.3.2"
+  resolved "https://registry.yarnpkg.com/@types/busboy/-/busboy-0.3.2.tgz#2f29b017513415399c42632ae6a7cfcb1409b79c"
+  integrity sha512-iEvdm9Z9KdSs/ozuh1Z7ZsXrOl8F4M/CLMXPZHr3QuJ4d6Bjn+HBMC5EMKpwpAo8oi8iK9GZfFoHaIMrrZgwVw==
+  dependencies:
+    "@types/node" "*"
+
 "@types/connect@*":
   version "3.4.35"
   resolved "https://registry.yarnpkg.com/@types/connect/-/connect-3.4.35.tgz#5fcf6ae445e4021d1fc2219a4873cc73a3bb2ad1"
@@ -117,6 +124,14 @@
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/@types/crypto-js/-/crypto-js-4.1.0.tgz#09ba1b49bcce62c9a8e6d5e50a3364aa98975578"
   integrity sha512-DCFfy/vh2lG6qHSGezQ+Sn2Ulf/1Mx51dqOdmOKyW5nMK3maLlxeS3onC7r212OnBM2pBR95HkAmAjjF08YkxQ==
+
+"@types/express-fileupload@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@types/express-fileupload/-/express-fileupload-1.2.2.tgz#98c10e900c222744bba16c848505a1fa95ab3ff0"
+  integrity sha512-sWU1EVFfLsdAginKVrkwTRbRPnbn7dawxEFEBgaRDcpNFCUuksZtASaAKEhqwEIg6fSdeTyI6dIUGl3thhrypg==
+  dependencies:
+    "@types/busboy" "^0"
+    "@types/express" "*"
 
 "@types/express-serve-static-core@^4.17.18":
   version "4.17.28"
@@ -367,6 +382,13 @@ busboy@^0.2.11:
     dicer "0.2.5"
     readable-stream "1.1.x"
 
+busboy@^0.3.1:
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/busboy/-/busboy-0.3.1.tgz#170899274c5bf38aae27d5c62b71268cd585fd1b"
+  integrity sha512-y7tTxhGKXcyBxRKAni+awqx8uqaJKrSFSNFSeRG5CsWNdmy2BIK+6VGWEW7TZnIO/533mtMEA4rOevQV815YJw==
+  dependencies:
+    dicer "0.3.0"
+
 bytes@3.1.1:
   version "3.1.1"
   resolved "https://registry.yarnpkg.com/bytes/-/bytes-3.1.1.tgz#3f018291cb4cbad9accb6e6970bca9c8889e879a"
@@ -599,6 +621,13 @@ dicer@0.2.5:
     readable-stream "1.1.x"
     streamsearch "0.1.2"
 
+dicer@0.3.0:
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/dicer/-/dicer-0.3.0.tgz#eacd98b3bfbf92e8ab5c2fdb71aaac44bb06b872"
+  integrity sha512-MdceRRWqltEG2dZqO769g27N/3PXfcKl04VhYnBlo2YhH7zPi88VebsjTKclaOyiuMaGU72hTfw3VkUitGcVCA==
+  dependencies:
+    streamsearch "0.1.2"
+
 diff@^4.0.1:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/diff/-/diff-4.0.2.tgz#60f3aecb89d5fae520c11aa19efc2bb982aade7d"
@@ -664,6 +693,13 @@ etag@~1.8.1:
   version "1.8.1"
   resolved "https://registry.yarnpkg.com/etag/-/etag-1.8.1.tgz#41ae2eeb65efa62268aebfea83ac7d79299b0887"
   integrity sha1-Qa4u62XvpiJorr/qg6x9eSmbCIc=
+
+express-fileupload@^1.3.1:
+  version "1.3.1"
+  resolved "https://registry.yarnpkg.com/express-fileupload/-/express-fileupload-1.3.1.tgz#3238472def305b8cb4cc5936a953761d0c442011"
+  integrity sha512-LD1yabD3exmWIFujKGDnT1rmxSomaqQSlUvzIsrA1ZgwCJ6ci7lg2YHFGM3Q6DfK+Yk0gAVU7GWLE7qDMwZLkw==
+  dependencies:
+    busboy "^0.3.1"
 
 express@^4.17.2:
   version "4.17.2"

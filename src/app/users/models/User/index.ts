@@ -11,6 +11,7 @@ export type UserSchema = BaseSchema & {
   email: string;
   password: string;
   isActive?: boolean;
+  image?: string;
   accessTokens?: AccessTokenSchema[];
 };
 
@@ -27,7 +28,7 @@ export default class User<UserSchema>
    * {@inheritDoc}
    */
   public get sharedData(): any {
-    return this.only("id", "email", "name");
+    return this.only("id", "email", "name", "image");
   }
 
   /**

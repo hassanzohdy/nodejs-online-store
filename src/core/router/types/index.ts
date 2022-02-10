@@ -69,4 +69,10 @@ export type RouterConfigurations = {
    * Set base path prefix for all routes
    */
   prefix?: string;
+  /**
+   * Deal with all POST requests that has _method key as PUT request
+   *
+   * @default true
+   */
+  putToPost?: boolean;
 };

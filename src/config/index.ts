@@ -21,6 +21,7 @@ export const applicationConfigurations: ApplicationConfigurations = {
 
 export const routerConfigurations: RouterConfigurations = {
   prefix: env("ROUTER_PREFIX"),
+  putToPost: true,
 };
 
 setEncryptionConfigurations({

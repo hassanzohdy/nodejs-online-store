@@ -22,6 +22,13 @@ export class Response {
   }
 
   /**
+   * Send file
+   */
+  public sendFile(filePath: string): void {
+    this.baseResponse.sendFile(filePath);
+  }
+
+  /**
    * Send success response
    */
   public success(data: any): any {

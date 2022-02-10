@@ -213,7 +213,13 @@ abstract class BaseModel<Schema> {
    * Get first matched value for the given options
    */
   public static async first<T>(options: any = {}) {
-    return (await this.list<T>(options)).first();
+    BaseModel.trigger(this.collection, "fetching", options);
+
+    const record: any = await this.query.first<T>(options);
+
+    BaseModel.trigger(this.collection, "fetch", record, options);
+
+    return record ? newModel(this.collection, record) : null;
   }
 
   /**
@@ -439,7 +445,7 @@ abstract class BaseModel<Schema> {
    * One model serializing to json
    */
   public toJSON(): any {
-    return this.data;
+    return this.sha;
   }
 
   /**

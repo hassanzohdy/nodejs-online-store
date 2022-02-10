@@ -6,8 +6,9 @@ import { RequestMethod } from "../router";
 import { Obj } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { DynamicObject } from "utils/types";
-import { log } from "../log";
 import Validator from "../validation";
+import UploadedFile from "./UploadedFile";
+import { applicationConfigurations, routerConfigurations } from "config";
 
 export class Request implements AppRequest {
   /**
@@ -64,6 +65,7 @@ export class Request implements AppRequest {
    */
   public setRequest(request: ExpressRequest): void {
     this.baseRequest = request;
+
     this.setDataList(
       request.params,
       request.query,
@@ -83,7 +85,7 @@ export class Request implements AppRequest {
    * Get value from either query string params or request payload
    */
   public input(key: string, defaultValue: any = null): any {
-    return cast(Obj.get(this.allData, key, defaultValue));
+    return this.file(key) || cast(Obj.get(this.allData, key, defaultValue));
   }
 
   /**
@@ -183,6 +185,15 @@ export class Request implements AppRequest {
   }
 
   /**
+   * Get file instance
+   */
+  public file(field: string): UploadedFile | null {
+    return this.filesList[field]
+      ? new UploadedFile(this.filesList[field])
+      : null;
+  }
+
+  /**
    * Clone the request instance
    */
   public get clone(): Request {
@@ -213,7 +224,15 @@ export class Request implements AppRequest {
     this.paramsList = Obj.clone(params || {});
     this.bodyList = Obj.clone(body || {});
     this.queryList = Obj.clone(query || {});
-    this.filesList = Obj.clone(files || []);
+
+    this.filesList = Is.array(files) ? {} : Obj.clone(files || {});
+
+    if (Is.array(files)) {
+      for (let file of files || []) {
+        this.filesList[file.fieldname] = file;
+      }
+    }
+
     this.allData =
       allData ||
       Obj.merge(this.paramsList, this.queryList, this.bodyList, this.filesList);
@@ -231,6 +250,22 @@ export class Request implements AppRequest {
    */
   public get userAgent(): string {
     return this.header("user-agent");
+  }
+
+  /**
+   * Get current uri
+   */
+  public get uri(): string {
+    return this.baseRequest.url;
+  }
+
+  /**
+   * Get the route only without the base path or route prefix
+   */
+  public get route(): string {
+    return this.uri
+      .replace(new RegExp(`^${applicationConfigurations.appPath}`), "")
+      .replace(new RegExp(`^${routerConfigurations.prefix}`), "");
   }
 
   /**

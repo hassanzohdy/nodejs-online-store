@@ -1,10 +1,8 @@
 import express from "express";
 import { log } from "../log";
 import chalk from "chalk";
-import multer from "multer";
 import router from "../router";
 import database from "../db";
-import middlewareList from "../router/middleware";
 import { applicationConfigurations, databaseConfigurations } from "config";
 
 export default function startApplication() {
@@ -12,21 +10,8 @@ export default function startApplication() {
 
   const port: number = applicationConfigurations.port;
 
-  const upload = multer();
-
   // connect to database
   database.connect(databaseConfigurations);
-
-  // for form data
-  app.use(upload.any());
-
-  // for json content
-  app.use(express.json());
-
-  // for form-urlencoded
-  app.use(express.urlencoded({ extended: true }));
-
-  middlewareList.list().map((middleware) => app.use(middleware));
 
   router.scan(app);
 

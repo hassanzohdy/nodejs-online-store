@@ -1,3 +1,4 @@
+import UploadedFile from "../../http/UploadedFile";
 import Rule from "./rule";
 
 export default class MinRule extends Rule {
@@ -19,7 +20,13 @@ export default class MinRule extends Rule {
    * {@inheritdoc}
    */
   protected validateRule(): void {
-    this.isValid = Number(this.value) >= Number(this.options[0]);
+    if (this.value instanceof UploadedFile) {
+      const [size, type] = this.options[0].match(/[\d\.]+|\D+/g);
+
+      this.isValid = this.value.size(type.toLocaleLowerCase()) >= Number(size);
+    } else {
+      this.isValid = Number(this.value) >= Number(this.options[0]);
+    }
   }
 
   /**
