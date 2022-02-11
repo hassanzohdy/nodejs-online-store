@@ -25,12 +25,11 @@ import {
   WhereArrayHasOperator,
   WhereSearchingAsObject,
 } from "./types";
-import OrderByPipeline from "./pipelines/skip-pipeline";
+import OrderByPipeline from "./pipelines/order-by-pipeline";
 import SelectPipeline from "./pipelines/select-pipeline";
 import UnselectPipeline from "./pipelines/unselect-pipeline";
 import collect, { Collection as ArrayCollection } from "collect.js";
 import { newModel } from "./models";
-import { log } from "../log";
 
 // typescript function overload
 export default class Aggregate implements AggregateInterface {

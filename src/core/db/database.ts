@@ -69,7 +69,7 @@ class Database {
   /**
    * Determine whether a connection has been established to the database
    */
-  public isConnected(): boolean {
+  public get isConnected(): boolean {
     return this.client !== undefined;
   }
 
@@ -77,6 +77,10 @@ class Database {
    * Get database collection
    */
   public collection(collectionName: string): Collection {
+    if (!this.isConnected) {
+      throw new Error("Database is not connected yet...");
+    }
+
     return this.db.collection(collectionName);
   }
 

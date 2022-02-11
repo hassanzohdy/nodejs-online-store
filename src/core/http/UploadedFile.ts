@@ -92,4 +92,147 @@ export default class UploadedFile {
 
     return filePath;
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  public toJSON(): any {
+    return this.file;
+  }
+}
+
+export class UploadedFileList {
+  /**
+   * Files list
+   */
+  public filesList: UploadedFile[] = [];
+
+  /**
+   * Constructor
+   */
+  public constructor(files: any) {
+    for (let file of files) {
+      this.filesList.push(new UploadedFile(file));
+    }
+  }
+
+  /**
+   * Map over files
+   */
+  public map(callback: (file: UploadedFile) => any): any[] {
+    return this.filesList.map(callback);
+  }
+
+  /**
+   * Perform some action on all files
+   */
+  public each(
+    callback: (file: UploadedFile, index: number) => any
+  ): UploadedFileList {
+    this.filesList.forEach(callback);
+
+    return this;
+  }
+
+  /**
+   * Get files length
+   */
+  public get length(): number {
+    return this.filesList.length;
+  }
+
+  /**
+   * Make the class iterable
+   */
+  [Symbol.iterator](): Iterator<UploadedFile> {
+    let index: number = -1;
+
+    return {
+      next: () => {
+        index++;
+        return {
+          done: index === this.filesList.length,
+          value: this.filesList[index],
+        };
+      },
+    };
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public toJSON(): any {
+    return this.filesList;
+  }
+
+  /**
+   * Get all file sizes
+   */
+  /**
+   * Save file as the given new name
+   */
+  public saveAs(
+    newFileName: string | ((file: UploadedFile, index: number) => string)
+  ): UploadedFileList {
+    this.each((file, index) => {
+      if (typeof newFileName === "string") {
+        newFileName = (file: UploadedFile, index: number): string => {
+          return index + "_" + newFileName;
+        };
+      }
+
+      file.saveAs(newFileName(file, index));
+    });
+
+    return this;
+  }
+
+  /**
+   * Get file extension
+   */
+  public get extension(): string[] {
+    return this.map((file) => file.extension);
+  }
+
+  /**
+   * Get file size
+   */
+  public size(sizeType: "kb" | "mb" | "b" = "b"): number[] {
+    return this.map((file) => file.size(sizeType));
+  }
+
+  /**
+   * Get mime type
+   */
+  public get mimeType(): string[] {
+    return this.map((file) => file.mimeType);
+  }
+
+  /**
+   * Get file original name
+   */
+  public get originalName(): string[] {
+    return this.map((file) => file.originalName);
+  }
+
+  /**
+   * If called, then it will save the file with random string
+   */
+  public get random(): UploadedFileList {
+    this.each((file) => file.random);
+    return this;
+  }
+
+  /**
+   * Save file to the given destination and return its path
+   */
+  public async saveTo(destination: string): Promise<string[]> {
+    let paths: string[] = [];
+
+    for (let file of this.filesList) {
+      paths.push(await file.saveTo(destination));
+    }
+
+    return paths;
+  }
 }

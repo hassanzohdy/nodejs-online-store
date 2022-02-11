@@ -18,9 +18,9 @@ export default async function auth(
 
   const [authorizationType, authorizationValue] = authorization.split(" ");
 
-  let authType: string = authorizationType.toLocaleLowerCase().trim();
+  let authType: string = String(authorizationType).toLocaleLowerCase().trim();
 
-  let authValue: string = authorizationValue.trim();
+  let authValue: string = String(authorizationValue).trim();
 
   if (!authType || !authValue) {
     return response.send(authErrors.missingAuthTypeOrValue);
@@ -37,7 +37,7 @@ export default async function auth(
   if (authType == "bearer") {
     if (
       !(await attempt({
-        accessTokens: authValue,
+        "accessTokens.token": authValue,
       }))
     ) {
       return response.send(authErrors.invalidUser);

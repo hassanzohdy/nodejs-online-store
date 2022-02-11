@@ -2,10 +2,7 @@ import { OrderBySchema, Pipeline } from "../types";
 import PipelineManager from "../pipeline";
 import { DynamicObject } from "utils/types";
 
-export default class OrderByPipeline
-  extends PipelineManager
-  implements Pipeline
-{
+export default class SkipPipeline extends PipelineManager implements Pipeline {
   /**
    * {@inheritdoc}
    */

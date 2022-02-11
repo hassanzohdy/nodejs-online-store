@@ -1,6 +1,7 @@
-import Rule from "./rule";
+import { UploadedFileList } from "core/http/UploadedFile";
+import LengthRule from "./length";
 
-export default class MinLengthRule extends Rule {
+export default class MinLengthRule extends LengthRule {
   /**
    * {@inheritdoc}
    */
@@ -9,25 +10,24 @@ export default class MinLengthRule extends Rule {
   /**
    * {@inheritdoc}
    */
-  protected beforeValidating(): void {
-    if (typeof this.options[0] === "undefined") {
-      throw new Error(
-        `minLength rule requires the min length number for validation.`
-      );
+  protected validateRule(): void {
+    if (this.value instanceof UploadedFileList) {
+      this.isValid = this.value.length >= this.length;
+    } else {
+      this.isValid = String(this.value).length >= this.length;
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  protected validateRule(): void {
-    this.isValid = String(this.value).length >= Number(this.options[0]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public get errorMessage(): string {
-    return this.message(`:input must be :options[0] characters or more.`);
+    if (this.value instanceof UploadedFileList) {
+      return this.message(`Uploaded :input must be :options[0] or more.`);
+    }
+
+    return this.message(
+      `:input'length must be :options[0] characters or more.`
+    );
   }
 }

@@ -3,8 +3,8 @@ import {
   Request as ExpressRequest,
   Response as ExpressResponse,
 } from "express";
-import { Response } from "../../http/response";
-import { Request as AppRequest } from "../../http/request";
+import { Response } from "core/http/response";
+import { Request as AppRequest } from "core/http/request";
 
 export type RequestMethod = "get" | "post" | "put" | "delete" | "patch";
 

@@ -16,10 +16,6 @@ export default function startApplication() {
   router.scan(app);
 
   app.listen(port, () => {
-    log(
-      `Server Started!, app path ${
-        applicationConfigurations.baseUrl
-      }:${chalk.bold.cyan(port)}`
-    );
+    log(`Server Started!, app path ${applicationConfigurations.baseUrl}`);
   });
 }

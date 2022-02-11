@@ -1,6 +1,8 @@
+import { UploadedFileList } from "core/http/UploadedFile";
+import LengthRule from "./length";
 import Rule from "./rule";
 
-export default class MaxLengthRule extends Rule {
+export default class MaxLengthRule extends LengthRule {
   /**
    * {@inheritdoc}
    */
@@ -9,27 +11,24 @@ export default class MaxLengthRule extends Rule {
   /**
    * {@inheritdoc}
    */
-  protected beforeValidating(): void {
-    if (typeof this.options[0] === "undefined") {
-      throw new Error(
-        `maxLength rule requires the max length number for validation.`
-      );
+  protected validateRule(): void {
+    if (this.value instanceof UploadedFileList) {
+      this.isValid = this.value.length <= this.length;
+    } else {
+      this.isValid = String(this.value).length <= this.length;
     }
   }
 
   /**
    * {@inheritdoc}
    */
-  protected validateRule(): void {
-    this.isValid = String(this.value).length <= Number(this.options[0]);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
   public get errorMessage(): string {
+    if (this.value instanceof UploadedFileList) {
+      return this.message(`Uploaded :input can not be more than :options[0].`);
+    }
+
     return this.message(
-      `:input must be less than or equal to :options[0] characters.`
+      `:input'length must be equal to or less than :options[0] characters.`
     );
   }
 }

@@ -223,6 +223,13 @@ abstract class BaseModel<Schema> {
   }
 
   /**
+   * Get last model
+   */
+  public static async last<T>() {
+    return this._.latest().limit(1).first<T>();
+  }
+
+  /**
    * Find list of records based on the given filter and return list of models
    */
   public static async list<T>(attributes: any = {}): Promise<Collection<T>> {

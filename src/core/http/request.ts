@@ -3,11 +3,11 @@ import { Request as AppRequest } from "./types/request";
 import { Request as ExpressRequest } from "express";
 import { IncomingHttpHeaders } from "http";
 import { RequestMethod } from "../router";
-import { Obj } from "@mongez/reinforcements";
+import { Obj, rtrim, toInputName } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { DynamicObject } from "utils/types";
 import Validator from "../validation";
-import UploadedFile from "./UploadedFile";
+import UploadedFile, { UploadedFileList } from "./UploadedFile";
 import { applicationConfigurations, routerConfigurations } from "config";
 
 export class Request implements AppRequest {
@@ -19,10 +19,15 @@ export class Request implements AppRequest {
    * Request data
    */
   public bodyList: any = {};
-  public filesList: any = {};
+  public files: any = {};
   public queryList: any = {};
   public paramsList: any = {};
   public allData: any = {};
+
+  /**
+   * Converted files list
+   */
+  public convertedFilesList!: any;
 
   /**
    * Request validator
@@ -85,20 +90,53 @@ export class Request implements AppRequest {
    * Get value from either query string params or request payload
    */
   public input(key: string, defaultValue: any = null): any {
-    return this.file(key) || cast(Obj.get(this.allData, key, defaultValue));
+    return cast(Obj.get(this.allData, key)) || this.file(key) || defaultValue;
   }
 
   /**
    * Get all inputs from query string params and request payload
    */
   public all(): any {
-    const inputs: any = { ...this.allData };
+    return Obj.merge(this.dataInputs(), this.convertedFiles);
+  }
 
-    for (let input in inputs) {
-      inputs[input] = cast(inputs[input]);
+  /**
+   * Get only all data, excluding files
+   */
+  public dataInputs(): any {
+    const inputs: any = {};
+
+    for (let input in this.allData) {
+      let inputName = this.adjustInputName(input);
+      let inputValue = Is.array(this.allData[input])
+        ? this.allData[input].map(cast)
+        : cast(this.allData[input]);
+
+      inputs[inputName] = inputValue;
     }
 
     return inputs;
+  }
+
+  /**
+   * Adjust input name
+   */
+  protected adjustInputName(input: string): string {
+    return rtrim(input, "[]");
+  }
+
+  /**
+   * Get all converted files
+   */
+  public get convertedFiles(): any {
+    if (!this.convertedFilesList) {
+      this.convertedFilesList = {};
+      for (let input in this.files) {
+        this.convertedFilesList[this.adjustInputName(input)] = this.file(input);
+      }
+    }
+
+    return this.convertedFilesList;
   }
 
   /**
@@ -187,10 +225,14 @@ export class Request implements AppRequest {
   /**
    * Get file instance
    */
-  public file(field: string): UploadedFile | null {
-    return this.filesList[field]
-      ? new UploadedFile(this.filesList[field])
-      : null;
+  public file(field: string): UploadedFile | UploadedFileList | null {
+    field = toInputName(field);
+
+    if (Is.array(this.files[field])) {
+      return new UploadedFileList(this.files[field]);
+    }
+
+    return this.files[field] ? new UploadedFile(this.files[field]) : null;
   }
 
   /**
@@ -204,7 +246,7 @@ export class Request implements AppRequest {
       this.paramsList,
       this.queryList,
       this.bodyList,
-      this.filesList,
+      this.files,
       this.allData
     );
 
@@ -225,17 +267,35 @@ export class Request implements AppRequest {
     this.bodyList = Obj.clone(body || {});
     this.queryList = Obj.clone(query || {});
 
-    this.filesList = Is.array(files) ? {} : Obj.clone(files || {});
+    this.files = Is.array(files) ? {} : Obj.clone(files || {});
 
     if (Is.array(files)) {
       for (let file of files || []) {
-        this.filesList[file.fieldname] = file;
+        this.files[file.fieldname] = file;
+      }
+    } else {
+      // this is important as if the file is uploaded as single value but ends with []
+      // then it should be treated as an array
+      // for example, image[] with single upload file will be returned as object
+      // so we'll convert it into an array
+      for (let input in this.files) {
+        if (input.endsWith("[]")) {
+          let file: any = this.files[input];
+          delete this.files[input];
+          this.files[this.adjustInputName(input)] = [file];
+        }
+      }
+    }
+
+    // check if the file has any array of files
+    for (let key in this.files) {
+      if (key.endsWith("[]")) {
+        this.files[rtrim(key, "[]")] = this.files[key];
       }
     }
 
     this.allData =
-      allData ||
-      Obj.merge(this.paramsList, this.queryList, this.bodyList, this.filesList);
+      allData || Obj.merge(this.paramsList, this.queryList, this.bodyList);
   }
 
   /**

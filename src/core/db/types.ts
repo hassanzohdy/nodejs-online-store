@@ -268,7 +268,10 @@ export type CastType =
   | "double"
   | "boolean"
   | "bool"
-  | "date";
+  | "file"
+  | "date"
+  | CastType[]
+  | BaseSchema[];
 
 export type AttributesCasts = {
   [column: string]: CastType;

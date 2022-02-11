@@ -1,4 +1,6 @@
-import UploadedFile from "../../http/UploadedFile";
+import Is from "@mongez/supportive-is";
+import splitByNumber, { stringSize } from "utils/string-with-number";
+import UploadedFile, { UploadedFileList } from "core/http/UploadedFile";
 import Rule from "./rule";
 
 export default class MinRule extends Rule {
@@ -20,10 +22,16 @@ export default class MinRule extends Rule {
    * {@inheritdoc}
    */
   protected validateRule(): void {
-    if (this.value instanceof UploadedFile) {
-      const [size, type] = this.options[0].match(/[\d\.]+|\D+/g);
+    if (this.value instanceof UploadedFileList) {
+      const [size, type] = stringSize(this.options[0]);
+      for (let file of this.value) {
+        this.isValid = file.size(type) >= size;
+        if (this.isValid === false) break;
+      }
+    } else if (this.value instanceof UploadedFile) {
+      const [size, type] = stringSize(this.options[0]);
 
-      this.isValid = this.value.size(type.toLocaleLowerCase()) >= Number(size);
+      this.isValid = this.value.size(type) >= size;
     } else {
       this.isValid = Number(this.value) >= Number(this.options[0]);
     }

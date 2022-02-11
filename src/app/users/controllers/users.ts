@@ -1,5 +1,6 @@
 import { Request } from "core/http/request";
 import { Response } from "core/http/response";
+import UploadedFile, { UploadedFileList } from "core/http/UploadedFile";
 import Validator from "core/validation";
 import User, { UserSchema } from "../models/User";
 
@@ -13,7 +14,7 @@ export default async function users(request: Request, response: Response) {
 }
 
 export async function createUser(request: Request, response: Response) {
-  const file = request.file("image");
+  const file = request.file("image") as UploadedFile;
 
   const userData = request.validated.all;
 
@@ -31,7 +32,7 @@ export async function createUser(request: Request, response: Response) {
 createUser.validate = (validator: Validator) => {
   return validator.rules({
     name: "required",
-    image: "required|image",
+    image: "image|length:1",
     email: "required|email|unique:users",
     password: "required|confirmed|minLength:8",
   });

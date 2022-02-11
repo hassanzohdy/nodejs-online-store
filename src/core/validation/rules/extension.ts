@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import Rule from "./rule";
+import { UploadedFileList } from "core/http/UploadedFile";
 
 export default class ExtensionRule extends Rule {
   /**
@@ -24,7 +25,15 @@ export default class ExtensionRule extends Rule {
    * {@inheritdoc}
    */
   protected validateRule(): void {
-    this.isValid = this.options.includes(this.value.extension);
+    if (this.value instanceof UploadedFileList) {
+      for (let file of this.value) {
+        this.isValid = this.options.includes(file.extension);
+
+        if (this.isValid === false) break;
+      }
+    } else {
+      this.isValid = this.options.includes(this.value.extension);
+    }
   }
 
   /**

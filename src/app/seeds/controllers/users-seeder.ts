@@ -12,7 +12,7 @@ export default async function userSeeder(request: Request, response: Response) {
 
   let total: number = 0;
 
-  for (let i = 0; i < 200000; i++) {
+  for (let i = 0; i < 100; i++) {
     log(`Creating ${i + 1} Record...`);
     const email = faker.internet.email();
     if (
