@@ -1,5 +1,5 @@
 import chalk from "chalk";
-import { UploadedFileList } from "core/http/UploadedFile";
+import UploadedFile, { UploadedFileList } from "core/http/UploadedFile";
 import Rule from "./rule";
 
 export default class LengthRule extends Rule {
@@ -33,6 +33,8 @@ export default class LengthRule extends Rule {
   protected validateRule(): void {
     if (this.value instanceof UploadedFileList) {
       this.isValid = this.value.length === this.length;
+    } else if (this.value instanceof UploadedFile) {
+      this.isValid = true;
     } else {
       this.isValid = String(this.value).length === this.length;
     }

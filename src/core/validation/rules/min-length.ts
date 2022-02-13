@@ -1,4 +1,4 @@
-import { UploadedFileList } from "core/http/UploadedFile";
+import UploadedFile, { UploadedFileList } from "core/http/UploadedFile";
 import LengthRule from "./length";
 
 export default class MinLengthRule extends LengthRule {
@@ -13,6 +13,8 @@ export default class MinLengthRule extends LengthRule {
   protected validateRule(): void {
     if (this.value instanceof UploadedFileList) {
       this.isValid = this.value.length >= this.length;
+    } else if (this.length === 1 && this.value instanceof UploadedFile) {
+      this.isValid = true;
     } else {
       this.isValid = String(this.value).length >= this.length;
     }

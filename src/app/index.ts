@@ -17,10 +17,10 @@ Model.onModel("creating", (model: any) => {
   model.createdBy = currentUser.sharedData;
 });
 
-database.on("connection", async () => {
-  let user = await User.last<User<UserSchema>>();
-  console.log(user.toJSON());
+// database.on("connection", async () => {
+//   let user = await User.last<User<UserSchema>>();
+//   console.log(user.toJSON());
 
-  //   let userResource = new UserResource(user);
-  //   console.log(userResource.toJSON());
-});
+//   //   let userResource = new UserResource(user);
+//   //   console.log(userResource.toJSON());
+// });
