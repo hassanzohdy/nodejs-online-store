@@ -6,8 +6,6 @@ export default function logRequest(
   response: Response,
   next: NextFunction
 ): any {
-  log(request.url);
-  log(request.baseUrl);
-
+  log(request.method.toUpperCase() + " " + request.url);
   next();
 }

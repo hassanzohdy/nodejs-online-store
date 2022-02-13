@@ -175,6 +175,13 @@ export class Request implements AppRequest {
   }
 
   /**
+   * Get request method
+   */
+  public get method(): string {
+    return this.baseRequest.method;
+  }
+
+  /**
    * Get http request payload
    */
   public get payload(): any {
