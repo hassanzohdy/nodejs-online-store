@@ -1,5 +1,5 @@
 import concatRoute from "@mongez/concat-route";
-import { applicationConfigurations } from "config";
+import { applicationConfigurations, storageConfigurations } from "config";
 
 /**
  * Get full url for the given route(s)
@@ -15,5 +15,5 @@ export function url(...routes: string[]): string {
  * Get url for uploads directory
  */
 export function uploadsUrl(path: string): string {
-  return url("/uploads", path);
+  return url(storageConfigurations.uploadsRoute, path);
 }

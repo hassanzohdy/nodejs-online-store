@@ -1,7 +1,7 @@
+import Validator from "core/validation";
 import { Request } from "core/http/request";
 import { Response } from "core/http/response";
-import UploadedFile, { UploadedFileList } from "core/http/UploadedFile";
-import Validator from "core/validation";
+import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
 
 export default async function users(request: Request, response: Response) {
@@ -37,6 +37,46 @@ createUser.validate = (validator: Validator) => {
     password: "required|confirmed|minLength:8",
   });
 };
+
+class RestfulApiController {
+  public create(request: Request, response: Response) {}
+}
+
+export async function updater(options: any = {}) {
+  options = {
+    model: User,
+    rules: {
+      name: "required",
+      email: `required|email|unique:users:email`,
+      password: "confirmed|minLength:8",
+    },
+  };
+
+  return async function (request: Request, response: Response) {
+    const record: any = await options.model.find(request.param("id"));
+
+    if (!record) {
+      return response.notFound({
+        error: "Record Not Found in our database.",
+      });
+    }
+
+    await record.save(request.validated.all);
+
+    return response.success({
+      record,
+    });
+  };
+}
+
+export const updateUser2 = updater({
+  model: User,
+  rules: {
+    name: "required",
+    email: `required|email|unique:users:email`,
+    password: "confirmed|minLength:8",
+  },
+});
 
 export async function updateUser(request: Request, response: Response) {
   const user = (await User.find(request.param("id"))) as User<UserSchema>;

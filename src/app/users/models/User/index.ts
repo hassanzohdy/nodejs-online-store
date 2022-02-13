@@ -1,11 +1,11 @@
 import hash from "core/hash";
 import database from "core/db";
 import AccessToken from "../AccessToken";
-import { AttributesCasts, BaseSchema } from "core/db/types";
+import { BaseSchema } from "core/db/types";
 import { Obj } from "@mongez/reinforcements";
 import BasModel, { ModelInterface } from "core/db/model";
 import { AccessTokenSchema } from "../AccessToken/schema";
-import Category from "../../../categories/models/category";
+import UserResource from "../../resources/user-resource";
 
 export type UserSchema = BaseSchema & {
   name: string;
@@ -25,38 +25,16 @@ export default class User<UserSchema>
    */
   public static collection: string = "users";
 
-  protected resource: any = {
-    int: ["id"],
-    boolean: ["isActive"],
-    file: ["image"],
-    date: [
-      {
-        column: "createdAt",
-        as: "creationDate",
-        format: "dd-MM-y",
-      },
-    ],
-    string: ["name", "email"],
-    resource: {
-      category: Category,
-    },
-    collection: {
-      users: User,
-    },
-  };
+  /**
+   * Resource Handler
+   */
+  protected resource: any = UserResource;
 
   /**
    * {@inheritDoc}
    */
   public get sharedData(): any {
     return this.only("id", "email", "name", "image", "createdBy");
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public toJSON(): any {
-    return this.sharedData;
   }
 
   /**

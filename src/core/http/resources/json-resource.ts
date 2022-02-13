@@ -119,7 +119,7 @@ export class JsonResource {
       };
     }
 
-    return { ...defaultValue, column };
+    return { ...defaultValue, ...column };
   }
 
   /**
@@ -256,7 +256,7 @@ export class JsonResource {
    * Parse other collectable columns
    */
   public parseCollectables(): JsonResource {
-    for (let column of this.resources) {
+    for (let column of this.collectables) {
       column = this.prepareColumn(column) as ResourceResourceType;
       this.parseValue(
         column,

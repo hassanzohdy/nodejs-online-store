@@ -86,9 +86,11 @@ export default class UploadedFile {
 
     const filePath: string = destination + "/" + fileName;
 
-    fs.makeDirectory(path.dirname(storage("uploads", filePath)), 0x777);
+    const fullStoragePath: string = storage("uploads", filePath);
 
-    await this.file.mv(storage("uploads", filePath));
+    fs.makeDirectory(path.dirname(fullStoragePath), 0x777);
+
+    await this.file.mv(fullStoragePath);
 
     return filePath;
   }

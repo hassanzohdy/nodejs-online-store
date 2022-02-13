@@ -169,6 +169,15 @@ export default class ModelAttributes<Schema> {
   }
 
   /**
+   * Get all attributes except the given names
+   */
+  public except<T>(...attributes: (keyof T)[]): T {
+    const allAttributesExcept = Obj.except(this.attributes, attributes as any);
+
+    return this.castAttributes(allAttributesExcept) as T;
+  }
+
+  /**
    * Associate the given data to the given column as embedded document of array of inner documents
    */
   public associate(
@@ -282,7 +291,7 @@ export default class ModelAttributes<Schema> {
     const values = this.only(...attributes);
     this.unset(...attributes);
 
-    return this;
+    return values;
   }
 
   /**
@@ -290,6 +299,7 @@ export default class ModelAttributes<Schema> {
    */
   public removeAttributes(...attributes: string[]): void {
     let finalAttributes: DynamicObject = {};
+
     for (let attribute in this.attributes) {
       if (attributes.includes(attribute)) continue;
 
@@ -302,7 +312,9 @@ export default class ModelAttributes<Schema> {
   /**
    * @alias removeAttributes
    */
-  public unset(...attributes: string[]): void {
+  public unset(...attributes: string[]): ModelAttributes<Schema> {
     this.removeAttributes(...attributes);
+
+    return this;
   }
 }

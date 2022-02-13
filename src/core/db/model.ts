@@ -11,6 +11,7 @@ import databaseManager from "./DatabaseManager";
 import collect, { Collection } from "collect.js";
 import events, { EventSubscription } from "@mongez/events";
 import { AttributesCasts, ModelEventName } from "./types";
+import { JsonResource } from "../http/resources";
 
 abstract class BaseModel<Schema> {
   /**
@@ -45,6 +46,16 @@ abstract class BaseModel<Schema> {
    * Casts Types
    */
   protected casts: AttributesCasts = {};
+
+  /**
+   * Resource handler
+   */
+  protected resource: any;
+
+  /**
+   * Shared attributes for resource
+   */
+  protected shareToResource: string = "attributes";
 
   /**
    * Constructor
@@ -424,7 +435,7 @@ abstract class BaseModel<Schema> {
   }
 
   /**
-   * On any model update
+   * On any model event
    */
   public static onModel(
     event: ModelEventName,
@@ -449,10 +460,36 @@ abstract class BaseModel<Schema> {
   }
 
   /**
-   * One model serializing to json
+   * Convert model into json data
+   * If the model has its own resource, then use it instead
    */
   public toJSON(): any {
-    return this.sha;
+    const data: any = this[this.shareToResource];
+
+    if (!this.resource) return data;
+
+    return this.wrapIntoOBject(new this.resource(), this.shareToResource);
+  }
+
+  /**
+   * Wrap the model into the given resource
+   */
+  public wrapInto(
+    resource: JsonResource,
+    sharedDataMethod: string = this.shareToResource
+  ): JsonResource {
+    resource.data = this[sharedDataMethod];
+    return resource;
+  }
+
+  /**
+   * A shorthand to wrap the model and return its converted data
+   */
+  public wrapIntoOBject(
+    resource: JsonResource,
+    sharedDataMethod: string = this.shareToResource
+  ): any {
+    return this.wrapInto(resource, sharedDataMethod).toJSON();
   }
 
   /**

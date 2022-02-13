@@ -1,11 +1,13 @@
 import AES from "crypto-js/aes";
 import { AuthConfigurations } from "core/auth";
-import { RouterConfigurations } from "core/router";
+import { RouterConfigurations, uploadsUrl, url } from "core/router";
 import { DatabaseConfigurations } from "core/db/types";
 import { ApplicationConfigurations } from "core/application";
 import { setEncryptionConfigurations } from "@mongez/encryption";
 import { env } from "core/dot-env";
 import User from "app/users/models/User";
+import { storage } from "utils/path";
+import { StorageConfigurations } from "core/filesystem/types";
 
 const secretKey: string = env("APP_SECRET_KEY");
 
@@ -43,4 +45,18 @@ export const authConfigurations: AuthConfigurations = {
   secretKey: secretKey,
   guard: User,
   apiKey: env("APP_API_KEY"),
+  // apps: {
+  //   admin: {
+  //     prefix: '/admin',
+  //     guard: User,
+  //   }
+  // }
+};
+
+export const storageConfigurations: StorageConfigurations = {
+  root: storage(),
+  uploads: storage("uploads"),
+  temp: storage("tmp"),
+  uploadsRoute: "/uploads",
+  uploadsUrl: uploadsUrl,
 };
