@@ -5,7 +5,7 @@ import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
 
 export default async function users(request: Request, response: Response) {
-  const users = await User._.paginate();
+  const users = await User._.latest().paginate();
 
   return response.success({
     records: users.records.map((user) => user.only("id", "name", "email")),
