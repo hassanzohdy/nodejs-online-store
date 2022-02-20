@@ -29,11 +29,6 @@ export default async function userSeeder(request: Request, response: Response) {
         name: faker.internet.userName(),
         email: email,
         password: hash.make(faker.internet.password()),
-        accessTokens: [
-          jwt.generate({
-            key: Random.string(96),
-          }),
-        ],
       })
     );
 
