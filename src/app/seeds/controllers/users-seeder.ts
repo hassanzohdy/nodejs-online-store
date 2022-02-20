@@ -30,6 +30,6 @@ export default async function userSeeder(request: Request, response: Response) {
   }
 
   response.send({
-    records: data,
+    records: await User._.count(),
   });
 }
