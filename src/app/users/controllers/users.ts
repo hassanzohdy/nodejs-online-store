@@ -3,11 +3,17 @@ import { Request } from "core/http/request";
 import { Response } from "core/http/response";
 import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
+import database from "core/db";
 
 export default async function users(request: Request, response: Response) {
   const users = await User._.latest().paginate({
     page: request.input("page", 1),
+    size: request.input("size", 25),
   });
+
+  console.log(
+    await database.collection(User.collection).listIndexes().toArray()
+  );
 
   return response.success({
     records: users.records.map((user) => user.only("id", "name", "email")),
