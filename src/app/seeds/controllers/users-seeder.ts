@@ -3,8 +3,6 @@ import { Request } from "core/http/types/request";
 import faker from "@faker-js/faker";
 import User from "app/users/models/User";
 import hash from "core/hash";
-import { jwt } from "core/auth";
-import { Random } from "@mongez/reinforcements";
 import { log } from "core/log";
 
 export default async function userSeeder(request: Request, response: Response) {
@@ -23,6 +21,12 @@ export default async function userSeeder(request: Request, response: Response) {
       console.log(email);
       continue;
     }
+
+    await User.create({
+      name: faker.internet.userName(),
+      email: email,
+      password: hash.make(faker.internet.password()),
+    });
 
     total++;
 
