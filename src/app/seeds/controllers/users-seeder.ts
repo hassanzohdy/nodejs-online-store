@@ -12,7 +12,7 @@ export default async function userSeeder(request: Request, response: Response) {
 
   let total: number = 0;
 
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < 10000; i++) {
     log(`Creating ${i + 1} Record...`);
     const email = faker.internet.email();
     if (
@@ -23,14 +23,6 @@ export default async function userSeeder(request: Request, response: Response) {
       console.log(email);
       continue;
     }
-
-    data.push(
-      await User.create({
-        name: faker.internet.userName(),
-        email: email,
-        password: hash.make(faker.internet.password()),
-      })
-    );
 
     total++;
 
