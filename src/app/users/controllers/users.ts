@@ -12,9 +12,10 @@ export default async function users(request: Request, response: Response) {
   });
 
   return response.success({
-    records: users.records.map((user) =>
-      user.only("id", "name", "email", "image")
-    ),
+    // records: users.records.map((user) =>
+    //   user.only("id", "name", "email", "image")
+    // ),
+    records: [],
     paginationInfo: users.info,
   });
 }
