@@ -5,14 +5,13 @@ import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
 
 export default async function users(request: Request, response: Response) {
-  // const users = await User._.latest().paginate({
-  //   page: request.input("page", 1),
-  // });
-  const users = await User._.latest().limit(25).list();
+  const users = await User._.latest().paginate({
+    page: request.input("page", 1),
+  });
 
   return response.success({
-    records: users.map((user) => user.only("id", "name", "email")),
-    // paginationInfo: users.info,
+    records: users.records.map((user) => user.only("id", "name", "email")),
+    paginationInfo: users.info,
   });
 }
 
@@ -35,7 +34,7 @@ export async function createUser(request: Request, response: Response) {
 createUser.validate = (validator: Validator) => {
   return validator.rules({
     name: "required",
-    image: "image|length:1",
+    image: "required|image|length:1",
     email: "required|email|unique:users",
     password: "required|confirmed|minLength:8",
   });

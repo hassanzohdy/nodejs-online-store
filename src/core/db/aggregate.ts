@@ -30,6 +30,7 @@ import SelectPipeline from "./pipelines/select-pipeline";
 import UnselectPipeline from "./pipelines/unselect-pipeline";
 import collect, { Collection as ArrayCollection } from "collect.js";
 import { newModel } from "./models";
+import timer from "utils/timer";
 
 // typescript function overload
 export default class Aggregate implements AggregateInterface {
@@ -377,6 +378,8 @@ export default class Aggregate implements AggregateInterface {
     const size: number = setup.size!;
     const skip: number = (page - 1) * size;
 
+    timer();
+
     const results = await this.query
       .aggregate([
         ...this.parse(),
@@ -392,11 +395,15 @@ export default class Aggregate implements AggregateInterface {
       ])
       .next();
 
+    timer("DB Size");
+
     const totalRecords: number = results?.total[0]?.totalDocuments ?? 0;
 
     this.skip(skip).limit(size);
+    timer("DB Query");
 
     const records = await this.list<T>();
+    timer("DB Query End");
 
     return {
       records: records,
