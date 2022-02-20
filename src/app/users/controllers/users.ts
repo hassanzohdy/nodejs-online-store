@@ -11,10 +11,6 @@ export default async function users(request: Request, response: Response) {
     size: request.input("size", 25),
   });
 
-  console.log(
-    await database.collection(User.collection).listIndexes().toArray()
-  );
-
   return response.success({
     records: users.records.map((user) => user.only("id", "name", "email")),
     paginationInfo: users.info,
