@@ -22,6 +22,7 @@ database.on("connection", async () => {
   // let user = await User.last<User<UserSchema>>();
   // console.log(user.toJSON());
 
+  await database.db.dropDatabase();
   await migrateAll();
 
   //   let userResource = new UserResource(user);
