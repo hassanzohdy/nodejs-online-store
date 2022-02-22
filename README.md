@@ -47,6 +47,11 @@ Feel free to make any **PR** or if you've any suggestions or issues open a new o
 - Create `Join` Aggregate.
 - Create `Unwind` Aggregate.
 - Create `Group By` Aggregate.
+- Create `whereLike` method.
+- Add `textSearch` index.
+- Add `geoLocation` where clause.
+- Add `geoLocation` index.
+- Add `populate` method with `Aggregate` framework.
 - Create `onModelUpdate` `onModuleUpdatePull` `onModelDelete` `onModelDeleteUnset` `onModelDeletePull` helpers in the model so when model is updated, update other models.
 
 ### Validation

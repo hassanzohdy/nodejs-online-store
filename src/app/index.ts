@@ -11,6 +11,8 @@ import { user } from "core/auth/guard";
 import User, { UserSchema } from "./users/models/User";
 import UserResource from "./users/resources/user-resource";
 import { migrateAll } from "./migrations";
+import Product, { ProductSchema } from "./products/models/Product";
+import { log } from "core/log";
 
 Model.onModel("creating", (model: any) => {
   let currentUser = user() as User<UserSchema>;
@@ -19,8 +21,19 @@ Model.onModel("creating", (model: any) => {
 });
 
 database.on("connection", async () => {
-  // let user = await User.last<User<UserSchema>>();
-  // console.log(user.toJSON());
-  //   let userResource = new UserResource(user);
-  //   console.log(userResource.toJSON());
+  // let ps: any = await Product.first();
+  // log(ps.createdBy);
+  // return;
+  // const user = await User.first();
+  // let p = await Product.create<ProductSchema>({
+  //   title: "My Product",
+  //   description: [
+  //     {
+  //       localeCode: "en",
+  //       text: "Description",
+  //     },
+  //   ],
+  //   createdBy: user.sharedData,
+  // });
+  // console.log(p);
 });

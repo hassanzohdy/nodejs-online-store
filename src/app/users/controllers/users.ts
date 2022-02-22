@@ -3,7 +3,8 @@ import { Request } from "core/http/request";
 import { Response } from "core/http/response";
 import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
-import database from "core/db";
+import fs from "@mongez/fs";
+import { storage, uploads } from "utils/path";
 
 export default async function users(request: Request, response: Response) {
   const users = await User._.latest().paginate({
@@ -12,9 +13,7 @@ export default async function users(request: Request, response: Response) {
   });
 
   return response.success({
-    records: users.records.map((user) =>
-      user.only("id", "name", "email", "image")
-    ),
+    records: users.records,
     paginationInfo: users.info,
   });
 }
@@ -87,13 +86,24 @@ export const updateUser2 = updater({
 export async function updateUser(request: Request, response: Response) {
   const user = (await User.find(request.param("id"))) as User<UserSchema>;
 
+  const file = request.file("image") as UploadedFile;
+
+  const userData = request.validated.all;
+
+  if (file) {
+    userData.image = await file.random.saveTo("images");
+    if (user.image) {
+      fs.unlink(uploads(user.image));
+    }
+  }
+
   if (!user) {
     return response.notFound({
       error: "Record Not Found in our database.",
     });
   }
 
-  await user.save(request.validated.all);
+  await user.save(userData);
 
   return response.success({
     record: user,

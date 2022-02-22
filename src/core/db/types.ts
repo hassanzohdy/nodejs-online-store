@@ -260,6 +260,11 @@ export type BaseSchema = {
   updatedAt?: Date | DateTime;
 };
 
+export type Localized = {
+  localeCode: string;
+  text: string;
+}[];
+
 export type CastType =
   | "string"
   | "int"

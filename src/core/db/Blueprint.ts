@@ -6,6 +6,13 @@ import { sha1 } from "@mongez/encryption";
 import databaseManager from "./DatabaseManager";
 import Migration, { MigrationSchema } from "./models/Migration";
 import { CreateIndexesOptions, IndexSpecification } from "mongodb";
+import Is from "@mongez/supportive-is";
+
+/**
+ * Blueprint Class
+ *
+ * `sparse`: true, means the index can be created on nullable or empty values
+ */
 
 export default class Blueprint<Schema> {
   /**
@@ -39,6 +46,34 @@ export default class Blueprint<Schema> {
       sparse: true,
       ...options,
     };
+    return this.index(columns, uniqueOptions);
+  }
+
+  /**
+   * Create text search indexes for the given columns
+   */
+  public textSearch(
+    columns: IndexSpecification,
+    options?: CreateIndexesOptions
+  ): Blueprint<Schema> {
+    const uniqueOptions: CreateIndexesOptions = {
+      sparse: true,
+      textIndexVersion: 3,
+      ...options,
+    };
+
+    if (Is.array(columns)) {
+      columns = columns.map((column) => {
+        if (Is.string(column)) {
+          return {
+            [column as string]: "text",
+          };
+        }
+
+        return column;
+      }) as any;
+    }
+
     return this.index(columns, uniqueOptions);
   }
 
