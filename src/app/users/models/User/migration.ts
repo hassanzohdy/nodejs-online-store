@@ -1,6 +1,12 @@
 import Blueprint from "core/db/Blueprint";
 import User, { UserSchema } from "./index";
 
+export async function migrateUserPublishedIndex() {
+  const userBluePrint = Blueprint.of<UserSchema>(User.collection);
+
+  await userBluePrint.index("published").migrate("Creating published index.");
+}
+
 export async function migrateUniqueUsersEmailAndId() {
   const userBluePrint = Blueprint.of<UserSchema>(User.collection);
 

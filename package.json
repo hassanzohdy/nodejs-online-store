@@ -5,7 +5,8 @@
   "license": "MIT",
   "scripts": {
     "postinstall": "link-module-alias",
-    "start": "nodemon src/index.ts --app"
+    "start": "nodemon src/index.ts --app",
+    "migrate": "nodemon src/migrate.ts --app"
   },
   "_moduleAliases": {
     "src": "./src",
