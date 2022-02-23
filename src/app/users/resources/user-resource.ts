@@ -1,5 +1,6 @@
 import {
   JsonResource,
+  ResourceDateType,
   ResourceResourceType,
   ResourceType,
 } from "core/http/resources";
@@ -13,12 +14,12 @@ export default class UserResource extends JsonResource {
   /**
    * {@inheritdoc}
    */
-  public boolean: Array<ResourceType | string> = ["isActive"];
+  public boolean: Array<ResourceType | string> = ["published"];
 
   /**
    * {@inheritdoc}
    */
-  public string: Array<ResourceType | string> = ["name", "email", "hola"];
+  public string: Array<ResourceType | string> = ["name", "email"];
 
   /**
    * {@inheritdoc}
@@ -28,7 +29,7 @@ export default class UserResource extends JsonResource {
   /**
    * {@inheritdoc}
    */
-  public dates: Array<ResourceType | string> = ["createdAt"];
+  public dates: Array<ResourceDateType | string> = ["createdAt"];
 
   /**
    * {@inheritdoc}

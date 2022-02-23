@@ -2,9 +2,11 @@ import { DateTime } from "luxon";
 import { Obj } from "@mongez/reinforcements";
 import Is from "@mongez/supportive-is";
 import { AttributesCasts, CastType } from "./types";
-import { applicationConfigurations } from "config";
 import date from "utils/date";
 import { DynamicObject } from "utils/types";
+import UploadedFile, { UploadedFileList } from "../http/UploadedFile";
+import hash from "../hash";
+import chalk from "chalk";
 
 export default class ModelAttributes<Schema> {
   /**
@@ -13,9 +15,21 @@ export default class ModelAttributes<Schema> {
   public attributes: any = {};
 
   /**
+   * Dynamic call for attributes
+   */
+  [attribute: string]: any;
+
+  /**
    * Default casts list
    */
   protected defaultCasts: AttributesCasts = {};
+
+  /**
+   * Determine whether to keep file names
+   *
+   * @default false
+   */
+  protected keepFileNames!: string[] | boolean;
 
   /**
    * Casts Types
@@ -69,7 +83,7 @@ export default class ModelAttributes<Schema> {
   /**
    * Cast the given attribute key based on the value in the attributes list to be stored in database
    */
-  public castAttributesIn(attributes: any): any {
+  public async castAttributesIn(attributes: any): Promise<any> {
     const castsList = { ...this.defaultCasts, ...this.casts };
     const newAttributes: DynamicObject = {};
 
@@ -77,7 +91,7 @@ export default class ModelAttributes<Schema> {
       let value = attributes[attribute];
 
       if (Is.plainObject(value)) {
-        value = this.castAttributesIn(value);
+        value = await this.castAttributesIn(value);
       }
 
       const castMode: CastType = castsList[attribute];
@@ -103,6 +117,37 @@ export default class ModelAttributes<Schema> {
         case "double":
           value = parseFloat(value);
           break;
+        case "file":
+        case "image":
+          if (
+            value instanceof UploadedFileList ||
+            value instanceof UploadedFile
+          ) {
+            let saveTo = castMode === "image" ? "images" : "";
+
+            if (
+              this.keepFileNames === false ||
+              (Is.array(this.keepFileNames) &&
+                (this.keepFileNames as string[]).includes(attribute) === false)
+            ) {
+              value.random;
+            }
+
+            try {
+              value = await value.saveTo(saveTo);
+            } catch (error) {
+              console.log(chalk.red("Error:"));
+
+              console.error(error);
+            }
+
+            break;
+          }
+        case "password":
+          if (value) {
+            value = hash.make(value);
+          }
+          break;
         case "date":
           value = date(value).toJSDate();
           break;
@@ -112,6 +157,39 @@ export default class ModelAttributes<Schema> {
     }
 
     return newAttributes;
+  }
+
+  /**
+   * This method will update current attributes for current model based on its casts
+   */
+  protected mapCastAttributesOut(finalAttributes: any): void {
+    let filesCastAttributes = this.getCastAttributesOf(
+      "image",
+      "file",
+      "password"
+    );
+
+    for (let attributeName of filesCastAttributes) {
+      this.setAttribute(attributeName, Obj.get(finalAttributes, attributeName));
+    }
+  }
+
+  /**
+   * Get all cast attributes names of the given types
+   */
+  protected getCastAttributesOf(...castTypes: CastType[]): string[] {
+    let attributes: string[] = [];
+
+    const casts = { ...this.defaultCasts, ...this.casts };
+
+    for (let attribute in casts) {
+      let castType = casts[attribute];
+      if (castTypes.includes(castType)) {
+        attributes.push(attribute);
+      }
+    }
+
+    return attributes;
   }
 
   /**
@@ -138,7 +216,18 @@ export default class ModelAttributes<Schema> {
   }
 
   /**
-   * Get attributes data
+   * Get original attribute
+   */
+
+  public getOriginalAttribute(
+    attribute: string,
+    defaultValue: any = null
+  ): any {
+    return Obj.get(this.originalAttributes, attribute, defaultValue);
+  }
+
+  /**
+   * Get all attributes data
    */
   public get data(): Schema {
     return this.castAttributes(this.attributes) as Schema;

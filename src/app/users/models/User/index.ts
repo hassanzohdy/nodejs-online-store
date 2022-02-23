@@ -1,8 +1,7 @@
-import hash from "core/hash";
 import database from "core/db";
 import AccessToken from "../AccessToken";
-import { BaseSchema } from "core/db/types";
 import { Obj } from "@mongez/reinforcements";
+import { AttributesCasts, BaseSchema } from "core/db/types";
 import BasModel, { ModelInterface } from "core/db/model";
 import { AccessTokenSchema } from "../AccessToken/schema";
 import UserResource from "../../resources/user-resource";
@@ -34,8 +33,17 @@ export default class User<UserSchema>
    * {@inheritDoc}
    */
   public get sharedData(): any {
-    return this.only("id", "email", "name", "image", "createdBy");
+    return this.only("id", "email", "name", "published", "image", "createdBy");
   }
+
+  /**
+   * {@inheritDoc}
+   */
+  protected casts: AttributesCasts = {
+    image: "image",
+    password: "password",
+    published: "boolean",
+  };
 
   /**
    * {@inheritdoc}
@@ -43,20 +51,7 @@ export default class User<UserSchema>
   public static async create<T>(data: T | any): Promise<any> {
     data.accessTokens = [await AccessToken.generate()];
 
-    data.password = hash.make(data.password);
-
     return super.create(data);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  public async save(attributes?: any): Promise<any> {
-    if (attributes?.password) {
-      attributes.password = hash.make(attributes.password);
-    }
-
-    return super.save(attributes);
   }
 
   /**

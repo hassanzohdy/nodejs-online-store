@@ -32,7 +32,12 @@ export class Request implements AppRequest {
   /**
    * Request validator
    */
-  private validator: Validator | null = null;
+  protected validator: Validator | null = null;
+
+  /**
+   * Mapped headers list
+   */
+  protected headersList: IncomingHttpHeaders = {};
 
   /**
    * Set Request validator
@@ -70,6 +75,11 @@ export class Request implements AppRequest {
    */
   public setRequest(request: ExpressRequest): void {
     this.baseRequest = request;
+
+    for (let header in this.baseRequest.headers) {
+      this.headersList[header.toLocaleLowerCase()] =
+        this.baseRequest.headers[header];
+    }
 
     this.setDataList(
       request.params,
@@ -206,14 +216,14 @@ export class Request implements AppRequest {
    * Get request header
    */
   public header(header: string, defaultValue?: any): any {
-    return this.headers[header] ?? defaultValue;
+    return this.headers[header.toLocaleLowerCase()] ?? defaultValue;
   }
 
   /**
    * Get http request header
    */
   public get headers(): IncomingHttpHeaders {
-    return this.baseRequest.headers;
+    return this.headersList;
   }
 
   /**
@@ -275,6 +285,8 @@ export class Request implements AppRequest {
     this.queryList = Obj.clone(query || {});
 
     this.files = Is.array(files) ? {} : Obj.clone(files || {});
+
+    this.convertedFilesList = null;
 
     if (Is.array(files)) {
       for (let file of files || []) {

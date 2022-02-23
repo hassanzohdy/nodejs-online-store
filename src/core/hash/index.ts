@@ -1,12 +1,14 @@
+import bcrypt from "bcryptjs";
 import { Hasher } from "./types";
-import { decrypt, encrypt } from "@mongez/encryption";
+
+const salt = 10;
 
 const hash: Hasher = {
   make(data: any): string {
-    return encrypt(data);
+    return bcrypt.hashSync(String(data), salt);
   },
   verify(cipherText: string, data: any): boolean {
-    return decrypt(cipherText) === data;
+    return bcrypt.compareSync(String(data), cipherText);
   },
 };
 

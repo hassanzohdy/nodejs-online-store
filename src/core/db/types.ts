@@ -271,12 +271,12 @@ export type CastType =
   | "integer"
   | "float"
   | "double"
+  | "image"
   | "boolean"
   | "bool"
   | "file"
-  | "date"
-  | CastType[]
-  | BaseSchema[];
+  | "password"
+  | "date";
 
 export type AttributesCasts = {
   [column: string]: CastType;

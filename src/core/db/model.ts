@@ -1,4 +1,3 @@
-import { log } from "../log";
 import { now } from "utils/date";
 import database from "./database";
 import { newModel } from "./models";
@@ -12,6 +11,9 @@ import collect, { Collection } from "collect.js";
 import events, { EventSubscription } from "@mongez/events";
 import { AttributesCasts, ModelEventName } from "./types";
 import { JsonResource } from "../http/resources";
+import Is from "@mongez/supportive-is";
+import fs from "@mongez/fs";
+import { uploads } from "utils/path";
 
 abstract class BaseModel<Schema> {
   /**
@@ -30,8 +32,20 @@ abstract class BaseModel<Schema> {
   public static collection: string;
 
   /**
-   * Original attributes data
+   * Determine whether to keep file names
+   *
+   * @default false
    */
+  protected get keepFileNames(): string[] | boolean {
+    return false;
+  }
+
+  /**
+   * If set to true, then on model update or delete, all files will be remained untouched
+   *
+   * Otherwise these files will be deleted
+   */
+  protected keepFiles: boolean = false;
 
   /**
    * Default casts list
@@ -127,9 +141,11 @@ abstract class BaseModel<Schema> {
       this.id = await databaseManager.newId(this.collection);
     }
 
-    const data: any = await this.query.insert(
-      this.castAttributesIn(this.attributes)
-    );
+    let finalAttributes = await this.castAttributesIn(this.attributes);
+
+    const data: any = await this.query.insert(finalAttributes);
+
+    this.mapCastAttributesOut(finalAttributes);
 
     this._id = data.insertedId;
 
@@ -152,14 +168,20 @@ abstract class BaseModel<Schema> {
 
     this.updatedAt = now();
 
+    await this.deleteFiles();
+
+    const finalAttributes = await this.castAttributesIn(this.attributes);
+
     const result = await this.query.update(
       { id: this.id },
       {
         $set: {
-          ...this.castAttributesIn(this.attributes),
+          ...finalAttributes,
         },
       }
     );
+
+    this.mapCastAttributesOut(finalAttributes);
 
     BaseModel.trigger(
       this.collection,
@@ -181,6 +203,38 @@ abstract class BaseModel<Schema> {
   }
 
   /**
+   * This method will delete old files in the model
+   * Please be careful when using it as it should be used before updating and deleting the model
+   * which is done automatically unless the `keepFiles` is set to false
+   */
+  public async deleteFiles(): Promise<void> {
+    if (this.keepFiles) return;
+
+    let attributes = this.getCastAttributesOf("image", "file");
+
+    for (let attribute of attributes) {
+      let attributeValue = this.getOriginalAttribute(attribute);
+
+      if (Is.empty(attributeValue)) continue;
+
+      if (Is.array(attributeValue)) {
+        for (let file of attributeValue) {
+          let filePath = uploads(file);
+          if (fs.exists(filePath)) {
+            fs.unlink(filePath);
+          }
+        }
+      } else {
+        let filePath = uploads(attributeValue);
+
+        if (fs.exists(filePath)) {
+          fs.unlink(filePath);
+        }
+      }
+    }
+  }
+
+  /**
    * Determine if the attributes have been modified
    */
   public isDirty(): boolean {
@@ -197,6 +251,8 @@ abstract class BaseModel<Schema> {
     if (!this.id) return null;
 
     BaseModel.trigger(this.collection, "deleting", this);
+
+    await this.deleteFiles();
 
     let result = await this.query.delete({
       id: this.id,

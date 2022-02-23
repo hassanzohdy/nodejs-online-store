@@ -11,6 +11,8 @@ import MinLengthRule from "./rules/min-length";
 import ConfirmedRule from "./rules/confirmed";
 import ImageRule from "./rules/image";
 import ExtensionRule from "./rules/extension";
+import BooleanRule from "./rules/boolean";
+import CheckboxRule from "./rules/checkbox";
 
 export const rulesList = {
   [InRule.rule]: InRule,
@@ -26,4 +28,8 @@ export const rulesList = {
   [MaxLengthRule.rule]: MaxLengthRule,
   [ConfirmedRule.rule]: ConfirmedRule,
   [ExtensionRule.rule]: ExtensionRule,
+  // an alias
+  bool: BooleanRule,
+  [BooleanRule.rule]: BooleanRule,
+  [CheckboxRule.rule]: CheckboxRule,
 };
