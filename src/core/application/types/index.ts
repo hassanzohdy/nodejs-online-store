@@ -26,3 +26,15 @@ export type ApplicationConfigurations = {
     format?: string;
   };
 };
+
+export type StartAppOptions = {
+  /**
+   * If set to true, then database will automatically try to connect
+   */
+  database?: boolean;
+  /**
+   * If set to true, then router will start scanning for routing.
+   * This is useful to be false when needing to run the application as cli only
+   */
+  router?: boolean;
+};
