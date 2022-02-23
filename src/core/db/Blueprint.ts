@@ -122,6 +122,14 @@ export default class Blueprint<Schema> {
       collection: this.collection,
     });
 
+    log(
+      chalk.yellow(
+        `Creating ${chalk.cyan(
+          name
+        )} Migration for ${collectionName} collection...`
+      )
+    );
+
     if (hasBeenMigratedBefore) {
       return;
       // return log(
@@ -131,14 +139,6 @@ export default class Blueprint<Schema> {
       //     )} migration in ${collectionName} collection, has been created before, skipping...`
       //   )
       // );
-    } else {
-      log(
-        chalk.yellow(
-          `Creating ${chalk.cyan(
-            name
-          )} Migration for ${collectionName} collection...`
-        )
-      );
     }
 
     if (this.operations.indexes) {
