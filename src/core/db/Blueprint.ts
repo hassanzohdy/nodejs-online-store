@@ -115,14 +115,6 @@ export default class Blueprint<Schema> {
    */
   public async migrate(name: string): Promise<any> {
     const collectionName: string = chalk.blueBright.bold(this.collection);
-    log(
-      chalk.yellow(
-        `Creating ${chalk.cyan(
-          name
-        )} Migration for ${collectionName} collection...`
-      )
-    );
-
     const migrationHash = sha1(JSON.stringify(this.operations));
 
     const hasBeenMigratedBefore = await Migration.first({
@@ -139,6 +131,14 @@ export default class Blueprint<Schema> {
       //     )} migration in ${collectionName} collection, has been created before, skipping...`
       //   )
       // );
+    } else {
+      log(
+        chalk.yellow(
+          `Creating ${chalk.cyan(
+            name
+          )} Migration for ${collectionName} collection...`
+        )
+      );
     }
 
     if (this.operations.indexes) {
