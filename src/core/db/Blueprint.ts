@@ -131,13 +131,14 @@ export default class Blueprint<Schema> {
     });
 
     if (hasBeenMigratedBefore) {
-      return log(
-        chalk.redBright(
-          `The ${chalk.cyan(
-            name
-          )} migration in ${collectionName} collection, has been created before, skipping...`
-        )
-      );
+      return;
+      // return log(
+      //   chalk.redBright(
+      //     `The ${chalk.cyan(
+      //       name
+      //     )} migration in ${collectionName} collection, has been created before, skipping...`
+      //   )
+      // );
     }
 
     if (this.operations.indexes) {
