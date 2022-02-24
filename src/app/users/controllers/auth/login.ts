@@ -23,7 +23,7 @@ export default async function login(request: Request, response: Response) {
 
   return response.success({
     record: {
-      ...user.sharedData,
+      ...user.toJSON(),
       accessToken: accessToken.token,
     },
   });
