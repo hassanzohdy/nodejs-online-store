@@ -149,6 +149,9 @@ export default class ModelAttributes<Schema> {
 
           if (value) {
             value = hash.make(value);
+          } else {
+            // keep the original password
+            value = this.getOriginalAttribute(attribute);
           }
 
           break;
