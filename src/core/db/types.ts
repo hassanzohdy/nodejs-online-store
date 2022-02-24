@@ -152,8 +152,8 @@ export interface AggregateInterface {
    */
   where(
     column: Column | any,
-    operator: DatabaseOperator,
-    value: Value,
+    operator?: DatabaseOperator,
+    value?: Value,
     type?: LogicalOperator
   ): AggregateInterface;
 

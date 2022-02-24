@@ -12,9 +12,19 @@ export default async function users(request: Request, response: Response) {
   });
 
   const email = request.input("email");
+  const name = request.input("name");
+  const id = request.input("id");
 
   if (email) {
     query.whereLike("email", email);
+  }
+
+  if (name) {
+    query.whereLike("name", name);
+  }
+
+  if (id) {
+    query.where("id", id);
   }
 
   const users = await query.paginate({
