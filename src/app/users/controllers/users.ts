@@ -13,9 +13,13 @@ export default async function users(request: Request, response: Response) {
 
   console.log("Updating published state");
 
-  for (let user of await User._.whereNull("published").list<
+  const usersList = await User._.whereNull("published").list<
     User<UserSchema>
-  >()) {
+  >();
+
+  console.log(usersList.length);
+
+  for (let user of usersList) {
     user.published = true;
     await user.save();
   }
