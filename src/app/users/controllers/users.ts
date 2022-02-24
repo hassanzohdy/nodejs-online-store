@@ -11,19 +11,6 @@ export default async function users(request: Request, response: Response) {
     [orderBy]: sortOrder,
   });
 
-  console.log("Updating published state");
-
-  const usersList = await User._.whereNull("published").list<
-    User<UserSchema>
-  >();
-
-  console.log(usersList.toArray().length);
-
-  for (let user of usersList) {
-    user.published = true;
-    await user.save();
-  }
-
   const email = request.input("email");
   const name = request.input("name");
   const id = request.input("id");
