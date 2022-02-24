@@ -17,7 +17,7 @@ export default async function users(request: Request, response: Response) {
     User<UserSchema>
   >();
 
-  console.log(usersList.length);
+  console.log(usersList.toArray().length);
 
   for (let user of usersList) {
     user.published = true;
