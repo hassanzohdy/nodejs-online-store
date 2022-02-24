@@ -10,17 +10,17 @@ export class Response {
   protected baseResponse!: ExpressResponse;
 
   /**
-   * Register events to response
-   */
-  public on(event: ResponseEvent, callback: any): EventSubscription {
-    return events.subscribe(`response.${event}`, callback);
-  }
-
-  /**
    * Set base response
    */
   public setBaseResponse(response: ExpressResponse): void {
     this.baseResponse = response;
+  }
+
+  /**
+   * Register events to response
+   */
+  public on(event: ResponseEvent, callback: any): EventSubscription {
+    return events.subscribe(`response.${event}`, callback);
   }
 
   /**

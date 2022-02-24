@@ -23,6 +23,8 @@ Model.onModel("creating", (model: any) => {
 
 response.on("success", (response: any) => {
   let currentUser = user() as User<UserSchema>;
+  console.log("Sending Success?");
+
   if (!currentUser) return;
 
   console.log("Success Response");
