@@ -254,6 +254,9 @@ abstract class BaseModel<Schema> {
    * Determine whether the given attribute is a dirty attribute
    */
   public isDirtyAttribute(attribute: string): boolean {
+    console.log(JSON.stringify(Obj.get(this.originalAttributes, attribute)));
+    console.log(JSON.stringify(Obj.get(this.attributes, attribute)));
+
     return (
       JSON.stringify(Obj.get(this.originalAttributes, attribute)) !==
       JSON.stringify(Obj.get(this.attributes, attribute))
