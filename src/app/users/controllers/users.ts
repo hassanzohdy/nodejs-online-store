@@ -13,7 +13,9 @@ export default async function users(request: Request, response: Response) {
 
   console.log("Updating published state");
 
-  for (let user of await User.list<User<UserSchema>>()) {
+  for (let user of await User._.whereNull("published").list<
+    User<UserSchema>
+  >()) {
     user.published = true;
     await user.save();
   }
