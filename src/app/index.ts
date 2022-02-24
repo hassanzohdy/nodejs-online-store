@@ -24,6 +24,7 @@ Model.onModel("creating", (model: any) => {
 response.on("success", (response: any) => {
   let currentUser = user() as User<UserSchema>;
   console.log("Sending Success?");
+  console.log(currentUser);
 
   if (!currentUser) return;
 
@@ -33,7 +34,7 @@ response.on("success", (response: any) => {
 });
 
 response.on("send", () => {
-  authLogout();
+  // authLogout();
   console.log("Sent Response");
 });
 
