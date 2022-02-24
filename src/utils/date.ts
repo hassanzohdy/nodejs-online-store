@@ -12,7 +12,9 @@ export default function date(
 ): DateTime {
   let returnedDate: DateTime;
 
-  if (Is.numeric(date)) {
+  if (date instanceof DateTime) {
+    return date;
+  } else if (Is.numeric(date)) {
     returnedDate = DateTime.fromSeconds(date);
   } else if (Is.string(date)) {
     returnedDate = DateTime.fromFormat(
