@@ -5,7 +5,19 @@ import UploadedFile from "core/http/UploadedFile";
 import User, { UserSchema } from "../models/User";
 
 export default async function users(request: Request, response: Response) {
-  const users = await User._.latest().paginate({
+  const orderBy = request.input("orderBy", "id");
+  const sortOrder = request.input("sortOrder", "desc");
+  const query = User._.orderBy({
+    [orderBy]: sortOrder,
+  });
+
+  const email = request.input("email");
+
+  if (email) {
+    query.whereLike("email", email);
+  }
+
+  const users = await query.paginate({
     page: request.input("page", 1),
     size: request.input("size", 25),
   });
