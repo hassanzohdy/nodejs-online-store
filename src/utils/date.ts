@@ -1,6 +1,6 @@
+import { DateTime } from "luxon";
 import Is from "@mongez/supportive-is";
 import { applicationConfigurations } from "config";
-import { DateTime } from "luxon";
 
 /**
  * Parse the given date and return a new DateTime instance

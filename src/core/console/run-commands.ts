@@ -8,8 +8,6 @@ export default function listenToCommands() {
 
   program.version(String(APPLICATION_VERSION));
 
-  // program.hook("postAction", () => exit(0));
-
   for (let command of commands) {
     if (command instanceof CommanderCommand) {
       program.addCommand(command);

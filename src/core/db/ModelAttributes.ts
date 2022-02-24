@@ -144,6 +144,8 @@ export default class ModelAttributes<Schema> {
             break;
           }
         case "password":
+          if (this.getAttribute(attribute) === value) break;
+
           if (value) {
             value = hash.make(value);
           }

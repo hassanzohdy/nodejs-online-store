@@ -72,6 +72,11 @@ abstract class BaseModel<Schema> {
   protected shareToResource: string = "attributes";
 
   /**
+   * Attributes that have been modified
+   */
+  protected modifiedAttributes: any = {};
+
+  /**
    * Constructor
    */
   public constructor(attributes = {} as Schema) {
@@ -88,6 +93,7 @@ abstract class BaseModel<Schema> {
           model[name] = value;
         } else {
           model.attributes[name] = value;
+          model.modifiedAttributes[name] = value;
         }
         return true;
       },
