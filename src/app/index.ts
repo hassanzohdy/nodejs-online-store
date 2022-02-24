@@ -25,11 +25,14 @@ response.on("success", (response: any) => {
   let currentUser = user() as User<UserSchema>;
   if (!currentUser) return;
 
+  console.log("Success Response");
+
   response.user = currentUser;
 });
 
 response.on("send", () => {
   authLogout();
+  console.log("Sent Response");
 });
 
 database.on("connection", async () => {
