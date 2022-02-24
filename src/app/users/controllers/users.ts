@@ -11,9 +11,12 @@ export default async function users(request: Request, response: Response) {
     [orderBy]: sortOrder,
   });
 
-  await User._.where("id", "!=", -1).update({
-    published: true,
-  });
+  console.log("Updating published state");
+
+  for (let user of await User.list<User<UserSchema>>()) {
+    user.published = true;
+    await user.save();
+  }
 
   const email = request.input("email");
   const name = request.input("name");
