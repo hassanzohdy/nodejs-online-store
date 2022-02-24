@@ -251,6 +251,16 @@ abstract class BaseModel<Schema> {
   }
 
   /**
+   * Determine whether the given attribute is a dirty attribute
+   */
+  public isDirtyAttribute(attribute: string): boolean {
+    return (
+      JSON.stringify(Obj.get(this.originalAttributes, attribute)) !==
+      JSON.stringify(Obj.get(this.attributes, attribute))
+    );
+  }
+
+  /**
    * Delete current model record
    */
   public async destroy(): Promise<any> {
