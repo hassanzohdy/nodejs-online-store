@@ -27,7 +27,7 @@ export class Response {
    * Send response
    */
   public send(data: any, statusCode: number = 200): void {
-    this.trigger("success", data, statusCode);
+    this.trigger("send", data, statusCode);
     this.baseResponse.status(statusCode).send(data);
   }
 
