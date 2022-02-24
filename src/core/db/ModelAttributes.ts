@@ -143,6 +143,7 @@ export default class ModelAttributes<Schema> {
 
             break;
           }
+          break;
         case "password":
           console.log(value);
           console.log(this.getAttribute(attribute));
