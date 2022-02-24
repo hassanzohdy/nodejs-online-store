@@ -11,6 +11,10 @@ export default async function users(request: Request, response: Response) {
     [orderBy]: sortOrder,
   });
 
+  await User._.update({
+    published: true,
+  });
+
   const email = request.input("email");
   const name = request.input("name");
   const id = request.input("id");
