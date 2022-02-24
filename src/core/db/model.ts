@@ -223,6 +223,8 @@ abstract class BaseModel<Schema> {
 
       if (Is.empty(attributeValue)) continue;
 
+      if (this.isDirtyAttribute(attributeValue) === false) continue;
+
       if (Is.array(attributeValue)) {
         for (let file of attributeValue) {
           let filePath = uploads(file);
