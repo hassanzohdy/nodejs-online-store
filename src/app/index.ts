@@ -7,7 +7,7 @@ import "./uploads";
 import "./products";
 import database from "core/db";
 import Model from "core/db/model";
-import { user } from "core/auth/guard";
+import { authLogout, user } from "core/auth/guard";
 import User, { UserSchema } from "./users/models/User";
 import UserResource from "./users/resources/user-resource";
 import { migrateAll } from "./migrations";
@@ -26,6 +26,10 @@ response.on("success", (response: any) => {
   if (!currentUser) return;
 
   response.user = currentUser;
+});
+
+response.on("send", () => {
+  authLogout();
 });
 
 database.on("connection", async () => {
