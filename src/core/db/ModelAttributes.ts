@@ -164,8 +164,6 @@ export default class ModelAttributes<Schema> {
       newAttributes[attribute] = value;
     }
 
-    console.log(newAttributes);
-
     return newAttributes;
   }
 
