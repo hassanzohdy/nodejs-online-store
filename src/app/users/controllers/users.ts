@@ -11,7 +11,7 @@ export default async function users(request: Request, response: Response) {
     [orderBy]: sortOrder,
   });
 
-  await User._.update({
+  await User._.where("id", "!=", -1).update({
     published: true,
   });
 
