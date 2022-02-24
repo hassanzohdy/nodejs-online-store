@@ -145,11 +145,7 @@ export default class ModelAttributes<Schema> {
           }
           break;
         case "password":
-          console.log(value);
-          console.log(this.getAttribute(attribute));
-          console.log(this.getAttribute(attribute) === value);
-
-          if (this.getAttribute(attribute) === value) break;
+          if (!this.isDirtyAttribute(attribute)) break;
 
           if (value) {
             value = hash.make(value);
