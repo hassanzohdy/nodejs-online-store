@@ -1,11 +1,20 @@
+import events, { EventSubscription } from "@mongez/events";
 import { Response as ExpressResponse } from "express";
 import { OutgoingHttpHeaders } from "http";
+import { ResponseEvent } from "./types/response";
 
 export class Response {
   /**
    * Express response
    */
   protected baseResponse!: ExpressResponse;
+
+  /**
+   * Register events to response
+   */
+  public on(event: ResponseEvent, callback: any): EventSubscription {
+    return events.subscribe(`response.${event}`, callback);
+  }
 
   /**
    * Set base response
@@ -18,6 +27,7 @@ export class Response {
    * Send response
    */
   public send(data: any, statusCode: number = 200): void {
+    this.trigger("success", data, statusCode);
     this.baseResponse.status(statusCode).send(data);
   }
 
@@ -32,13 +42,23 @@ export class Response {
    * Send success response
    */
   public success(data: any): any {
+    this.trigger("success", data);
     return this.send(data, 200);
+  }
+
+  /**
+   * Trigger the given event
+   */
+  public trigger(event: ResponseEvent, ...args: any[]) {
+    return events.trigger(`response.${event}`, ...args);
   }
 
   /**
    * Send success create response
    */
   public successCreate(data: any): any {
+    this.trigger("success", data);
+    this.trigger("successCreate", data);
     return this.send(data, 201);
   }
 
@@ -46,6 +66,7 @@ export class Response {
    * Send bad request response
    */
   public badRequest(data: any): void {
+    this.trigger("badRequest", data);
     return this.send(data, 400);
   }
 
@@ -53,6 +74,7 @@ export class Response {
    * Send unauthorized response
    */
   public unauthorized(data: any): void {
+    this.trigger("unauthorized", data);
     return this.send(data, 401);
   }
 
@@ -60,6 +82,7 @@ export class Response {
    * Send not found response
    */
   public notFound(data: any): void {
+    this.trigger("notFound", data);
     return this.send(data, 404);
   }
 

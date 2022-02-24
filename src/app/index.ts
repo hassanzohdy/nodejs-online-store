@@ -13,11 +13,19 @@ import UserResource from "./users/resources/user-resource";
 import { migrateAll } from "./migrations";
 import Product, { ProductSchema } from "./products/models/Product";
 import { log } from "core/log";
+import response from "core/http/response";
 
 Model.onModel("creating", (model: any) => {
   let currentUser = user() as User<UserSchema>;
   if (!currentUser) return;
   model.createdBy = currentUser.sharedData;
+});
+
+response.on("success", (response: any) => {
+  let currentUser = user() as User<UserSchema>;
+  if (!currentUser) return;
+
+  response.user = currentUser;
 });
 
 database.on("connection", async () => {
