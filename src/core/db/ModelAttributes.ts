@@ -148,11 +148,16 @@ export default class ModelAttributes<Schema> {
           if (!this.isDirtyAttribute(attribute)) break;
 
           if (value) {
+            console.log("Changing Password");
+
             value = hash.make(value);
           }
+
           break;
         case "date":
           value = date(value).toJSDate();
+          console.log(value);
+
           break;
       }
 
