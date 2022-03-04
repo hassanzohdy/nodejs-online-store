@@ -10,7 +10,7 @@ export default class CheckboxRule extends InRule {
    * {@inheritdoc}
    */
   protected beforeValidating(): void {
-    this.options = [true, false, 1, "On"];
+    this.options = [true, false, 1, "On", "on"];
     super.beforeValidating();
   }
 }
